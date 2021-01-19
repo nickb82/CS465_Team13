@@ -1,50 +1,71 @@
 import java.io.*;
 import java.net.*;
+import java.util.*;
+
+
+
+import java.text.SimpleDateFormat;
 
 public class EchoServer
 {
-
     public static void main(String args[])
     {
-        System.out.println("Echo Server is started!");
-        try 
-        (ServerSocket echoServer = new ServerSocket(8000);)
-        {
-            Socket clientSocket = echoServer.accept();
-            System.out.println("We are connected to client");
-            BufferedReader fromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            PrintWriter toClient = new PrintWriter(clientSocket.getOutputStream(),true);
-            String line;
-            //take in characeter by character
-           // char charFromClient;
-           // char[] charArray = new char[30];
+        char[] alphArray;
+        int count = 0;
+        boolean serverOn = true;
 
-            while((line = fromClient.readLine()) != null)
+        System.out.println("Echo Server is started!");
+
+        //try to connect Server to a port
+        try(ServerSocket echoServerSckt = new ServerSocket(8000))
+        {
+            System.out.println("Server Strarted!");
+
+            //Reporting if and when the server is connected
+            Calendar currentTime = Calendar.getInstance();
+            SimpleDateFormat formatter = new SimpleDateFormat("EEE, MMM dd, yyyy 'at' hh:mm:ss a, zzzz");
+            System.out.println("Time/Date: " + formatter.format(currentTime.getTime()));
+            System.out.println("(Server) Waiting on Clients......");
+
+            //Still need a condition to close the server
+            while(serverOn == true)
             {
-                System.out.println("On Server: " + line);
-                toClient.println(line);
+                //Creates threads for clients
+                count++;
+                Socket clientSocket = echoServerSckt.accept();
+                Runnable clientRunnable = new EchoThread(clientSocket, count);
+                Thread clientThread = new Thread(clientRunnable);
+
+                clientThread.start();
+                //System.out.println(" Server Connection Ending");
+
+                if(serverOn == false)
+                {
+                    System.out.println(" Server Connection Ending");
+                    break;
+                }
             }
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 
+        catch(IOException ioe)
+        {
+            System.out.println("Could not create server socket on port 8000. System Exiting!");
+            System.exit(-1);
+        }
+
+    }
 }
 
-//Please ignore, this is a work in progress
-/*
 class EchoThread implements Runnable
 {
     private Socket socket;
-    private in count;
+    private int count;
     private long threadId;
     InputStream fromClient;
     OutputStream toClient;
     private PrintWriter pw;
 
-    EchoThread(Sockets socket, int count)
+    EchoThread(Socket socket, int count)
     {
         this.socket = socket;
         this.count = count;
@@ -53,12 +74,16 @@ class EchoThread implements Runnable
     public long getThreadId()
     {
         threadId = Thread.currentThread().getId();
-        return id;
+        return threadId;
     }
 
-    @Ovveride
+    @Override
     public void run()
     {
+
+        
+        System.out.println("(Server) Client " + count +" is connected" );
+
         try
         {
             fromClient = socket.getInputStream();
@@ -70,12 +95,39 @@ class EchoThread implements Runnable
             System.err.println(e);
         }
 
-        try(Scanner sc = new Scanner(fromClient))
+        while(true)
         {
-            pw = new PrintWriter(toClient, true);
+            try
+            {
+                //Recieve input from buffer provided by the client
+                BufferedReader br = new BufferedReader(new InputStreamReader(fromClient));
+                String input = br.readLine();
 
-            if()
+                if(input.equals("quit"))
+                {
+                    socket.close();
+                    System.out.println("(Server) Client " + count + " Terminated");
+                    break;
+                }
+                else
+                {
+                    System.out.println("(Server) From Client " + count + ": " + input);
+                    pw = new PrintWriter(toClient, true);
+                    pw.println(input);
+                    pw.flush();
+                }
+
+            }
+
+            catch(IOException e)
+            {
+                System.err.println(e);
+            }
         }
+
     }
 }
-*/
+
+
+
+
