@@ -108,7 +108,7 @@ class EchoThread implements Runnable
                         validCharArr[alphIndex] = charFromClient;
 
                         // Shut down thread if valid quit is recieved
-                        if( (validCharArr[0] == 'q' || validCharArr[0] == 'Q') && (validCharArr[1] == 'u' || validCharArr[1] == 'U') && (validCharArr[2] == 'i' || validCharArr[2] == 'I') && (validCharArr[3] == 't' || validCharArr[3] == 'T'))
+                        if( Character.toLowerCase(validCharArr[0]) == 'q' && Character.toLowerCase(validCharArr[1]) == 'u' && Character.toLowerCase(validCharArr[2]) == 'i' && Character.toLowerCase(validCharArr[3]) == 't')
                         {
                             System.out.println("(Server) Client " + count + " is terminated");
                             threadRun = false;
