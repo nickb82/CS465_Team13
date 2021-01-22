@@ -12,51 +12,45 @@ public class EchoClient
         try
         {
         Socket socket = new Socket(InetAddress.getLocalHost(),8000);
-        PrintWriter toServer = new PrintWriter(socket.getOutputStream(),true);
-        BufferedReader fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        DataOutputStream toServer = new DataOutputStream(socket.getOutputStream());
+        DataInputStream fromServer = new DataInputStream(socket.getInputStream());
+        boolean clientOn = true;
 
         //Report success of client server connection
         System.out.println("(Client) We are connected to server.");
-        Scanner scanner = new Scanner(System.in);
 
-        while(true)
+        while(clientOn)
         {
+            Scanner scanner = new Scanner(System.in);
             System.out.println("Please Enter message: ");
             String input = scanner.nextLine();
 
-            //valid alphabetical array 
-            char[] alphArray = new char[input.length()];
-            int alphIndex = 0;
+            System.out.println("(Client) Prininting to Server");
+            //Send user input to the server
+            toServer.writeChars(input);
 
-            //check for valid inpuit
-            for(int index = 0; index < input.length(); index++)
+            char[] response = new char[input.length()];
+            System.out.print("(Client) Server response is: ");
+            System.out.println("");
+            int index = 0;
+
+            //Read from thread on server side
+            while(fromServer.available() > 0)
             {
-                // if lowercase of uppercase letters
-                if((input.charAt(index) >= 'a' && input.charAt(index) <= 'z')  || (input.charAt(index) >= 'A' && input.charAt(index) <= 'Z'))
-                {
-                    alphArray[alphIndex] = input.charAt(index);
-                    alphIndex++;
-                    //System.out.print(alphArray[index]);
-                }
+                response[index] = Character.toLowerCase(fromServer.readChar());
+                System.out.println(response[index]);
+                index++;
             }
 
             //check for quit causing termination of client connection and thread
-            if(alphArray[0] == 'q' && alphArray[1] == 'u' && alphArray[2] == 'i' && alphArray[3] == 't')
+            if(response[0] == 'q' && response[1] == 'u' && response[2] == 'i'  && response[3] == 't')
             {
-                toServer.println("quit");
-                socket.close();
-                break;
-            }
 
-            // Send message to server and wait for feedback from server
-            else
-            {
-                System.out.println("(Client) Prininting to Server");
-                //Send user input to the server
-                toServer.println(alphArray);
-                String response = fromServer.readLine();
-                System.out.println("(Client) Server response is: " + response);
-                
+                System.out.println("Client Session Terminated");
+                toServer.close();
+                fromServer.close();
+                socket.close();
+                clientOn = false;
             }
         }
     }

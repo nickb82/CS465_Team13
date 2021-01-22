@@ -37,6 +37,7 @@ public class EchoServer
                 Thread clientThread = new Thread(clientRunnable);
 
                 clientThread.start();
+                
                 //System.out.println(" Server Connection Ending");
 
                 if(serverOn == false)
@@ -61,9 +62,6 @@ class EchoThread implements Runnable
     private Socket socket;
     private int count;
     private long threadId;
-    InputStream fromClient;
-    OutputStream toClient;
-    private PrintWriter pw;
 
     EchoThread(Socket socket, int count)
     {
@@ -80,43 +78,46 @@ class EchoThread implements Runnable
     @Override
     public void run()
     {
+        boolean threadRun = true;
 
         
         System.out.println("(Server) Client " + count +" is connected" );
 
-        try
+        while(threadRun)
         {
-            fromClient = socket.getInputStream();
-            toClient = socket.getOutputStream();
-        }
-
-        catch(IOException e)
-        {
-            System.err.println(e);
-        }
-
-        while(true)
-        {
+            
             try
             {
-                //Recieve input from buffer provided by the client
-                BufferedReader br = new BufferedReader(new InputStreamReader(fromClient));
-                String input = br.readLine();
+                DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
+                DataInputStream fromClient = new DataInputStream(socket.getInputStream());
+                char[] charFromClient = new char[50];
+                char[] validCharArr = new char[50];
+                int index = 0;
+                int alphIndex = 0;
 
-                if(input.equals("quit"))
+                //check input stream from client 
+                while(fromClient.available() > 0)
                 {
-                    socket.close();
-                    System.out.println("(Server) Client " + count + " Terminated");
-                    break;
-                }
-                else
-                {
-                    System.out.println("(Server) From Client " + count + ": " + input);
-                    pw = new PrintWriter(toClient, true);
-                    pw.println(input);
-                    pw.flush();
-                }
+                    charFromClient[index] = fromClient.readChar();
 
+                    // put valid input into alphabetical array 
+                    if( (charFromClient[index] >= 'a' && charFromClient[index] <= 'z')  || ( charFromClient[index] >= 'A' && charFromClient[index] <= 'Z') )
+                    {
+                        validCharArr[alphIndex] = charFromClient[index];
+                        toClient.writeChar(validCharArr[alphIndex]);
+
+                        // Shut down thread if valid quit is recieved
+                        if( (validCharArr[0] == 'q' || validCharArr[0] == 'Q') && (validCharArr[1] == 'u' || validCharArr[1] == 'U') && (validCharArr[2] == 'i' || validCharArr[2] == 'I') && (validCharArr[3] == 't' || validCharArr[3] == 'T'))
+                        {
+                            System.out.println("(Server) Client " + count + " is terminated");
+                            threadRun = false;
+                        }
+                        alphIndex++;
+                    }
+
+                    toClient.flush();
+                    index++;
+                }
             }
 
             catch(IOException e)
