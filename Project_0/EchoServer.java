@@ -27,7 +27,7 @@ public class EchoServer
             System.out.println("Time/Date: " + formatter.format(currentTime.getTime()));
             System.out.println("(Server) Waiting on Clients......");
 
-            //Still need a condition to close the server
+            //WHile server is on and running
             while(serverOn == true)
             {
                 //Creates threads for clients
@@ -37,8 +37,6 @@ public class EchoServer
                 Thread clientThread = new Thread(clientRunnable);
 
                 clientThread.start();
-                
-                //System.out.println(" Server Connection Ending");
 
                 if(serverOn == false)
                 {
@@ -104,6 +102,8 @@ class EchoThread implements Runnable
                     if( (charFromClient[index] >= 'a' && charFromClient[index] <= 'z')  || ( charFromClient[index] >= 'A' && charFromClient[index] <= 'Z') )
                     {
                         validCharArr[alphIndex] = charFromClient[index];
+
+                        //Send current char to client
                         toClient.writeChar(validCharArr[alphIndex]);
 
                         // Shut down thread if valid quit is recieved

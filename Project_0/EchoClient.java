@@ -2,7 +2,6 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-//more comments to come
 public class EchoClient 
 {
     public static void main(String[] args)
@@ -42,7 +41,7 @@ public class EchoClient
                 index++;
             }
 
-            //check for quit causing termination of client connection and thread
+            //check for quit causing termination of client
             if(response[0] == 'q' && response[1] == 'u' && response[2] == 'i'  && response[3] == 't')
             {
 
