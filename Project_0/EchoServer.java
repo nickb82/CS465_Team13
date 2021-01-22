@@ -97,15 +97,12 @@ class EchoThread implements Runnable
                 {
                     //convert bytes to char
                     charFromClient = (char)fromClient.read();
-                    //System.out.println(charFromClient);
-
-
+                    
                     // put valid input into alphabetical array 
                     if( (charFromClient >= 'a' && charFromClient <= 'z')  || ( charFromClient >= 'A' && charFromClient <= 'Z') )
                     {
                         //Send current valid char to client
                         toClient.writeChar(charFromClient);
-                        //System.out.println(charFromClient);
 
                         //Save input to later be checked for user input == quit
                         validCharArr[alphIndex] = charFromClient;
