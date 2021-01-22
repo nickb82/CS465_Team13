@@ -88,23 +88,27 @@ class EchoThread implements Runnable
             {
                 DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
                 DataInputStream fromClient = new DataInputStream(socket.getInputStream());
-                char[] charFromClient = new char[50];
+                char charFromClient;
                 char[] validCharArr = new char[50];
-                int index = 0;
                 int alphIndex = 0;
 
                 //check input stream from client 
                 while(fromClient.available() > 0)
                 {
-                    charFromClient[index] = fromClient.readChar();
+                    //convert bytes to char
+                    charFromClient = (char)fromClient.read();
+                    //System.out.println(charFromClient);
+
 
                     // put valid input into alphabetical array 
-                    if( (charFromClient[index] >= 'a' && charFromClient[index] <= 'z')  || ( charFromClient[index] >= 'A' && charFromClient[index] <= 'Z') )
+                    if( (charFromClient >= 'a' && charFromClient <= 'z')  || ( charFromClient >= 'A' && charFromClient <= 'Z') )
                     {
-                        validCharArr[alphIndex] = charFromClient[index];
+                        //Send current valid char to client
+                        toClient.writeChar(charFromClient);
+                        //System.out.println(charFromClient);
 
-                        //Send current char to client
-                        toClient.writeChar(validCharArr[alphIndex]);
+                        //Save input to later be checked for user input == quit
+                        validCharArr[alphIndex] = charFromClient;
 
                         // Shut down thread if valid quit is recieved
                         if( (validCharArr[0] == 'q' || validCharArr[0] == 'Q') && (validCharArr[1] == 'u' || validCharArr[1] == 'U') && (validCharArr[2] == 'i' || validCharArr[2] == 'I') && (validCharArr[3] == 't' || validCharArr[3] == 'T'))
@@ -116,7 +120,6 @@ class EchoThread implements Runnable
                     }
 
                     toClient.flush();
-                    index++;
                 }
             }
 

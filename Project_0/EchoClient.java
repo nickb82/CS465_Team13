@@ -24,7 +24,7 @@ public class EchoClient
             System.out.println("Please Enter message: ");
             String input = scanner.nextLine();
 
-            System.out.println("(Client) Prininting to Server");
+            System.out.println("(Client) Write to Server");
             //Send user input to the server
             toServer.writeChars(input);
 
@@ -37,9 +37,11 @@ public class EchoClient
             while(fromServer.available() > 0)
             {
                 response[index] = Character.toLowerCase(fromServer.readChar());
-                System.out.println(response[index]);
+                System.out.print(response[index]);
                 index++;
             }
+            System.out.println();
+
 
             //check for quit causing termination of client
             if(response[0] == 'q' && response[1] == 'u' && response[2] == 'i'  && response[3] == 't')
