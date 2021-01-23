@@ -36,6 +36,7 @@ public class EchoServer
                 Runnable clientRunnable = new EchoThread(clientSocket, count);
                 Thread clientThread = new Thread(clientRunnable);
 
+                //Start the clients thread
                 clientThread.start();
 
                 if(serverOn == false)
@@ -46,6 +47,7 @@ public class EchoServer
             }
         }
 
+        // Any issue with creating server socket
         catch(IOException ioe)
         {
             System.out.println("Could not create server socket on port 8000. System Exiting!");
@@ -60,6 +62,11 @@ class EchoThread implements Runnable
     private Socket socket;
     private int count;
     private long threadId;
+
+    enum State
+    {
+        NO_STATE,Q_STATE, U_STATE, I_STATE, TERMINATE_STATE;
+    }
 
     EchoThread(Socket socket, int count)
     {
@@ -78,9 +85,11 @@ class EchoThread implements Runnable
     {
         boolean threadRun = true;
 
-        
-        System.out.println("(Server) Client " + count +" is connected" );
 
+        //Print to the server that a client has connected
+        System.out.println("(Server) Client " + count +" is connected" );
+        
+        // while thread is active
         while(threadRun)
         {
             
@@ -91,6 +100,8 @@ class EchoThread implements Runnable
                 char charFromClient;
                 char[] validCharArr = new char[50];
                 int alphIndex = 0;
+                State currentState = State.NO_STATE;
+                String validInput;
 
                 //check input stream from client 
                 while(fromClient.available() > 0)
@@ -104,18 +115,33 @@ class EchoThread implements Runnable
                         //Send current valid char to client
                         toClient.writeChar(charFromClient);
 
-                        //Save input to later be checked for user input == quit
-                        validCharArr[alphIndex] = charFromClient;
+                        //Change state of thread as user input comes closer to spelling quit
+                        if(charFromClient == 'q' && currentState == State.NO_STATE)
+                        {
+                            currentState = State.Q_STATE;
+                        }
+                        if(charFromClient == 'u' && currentState == State.Q_STATE)
+                        {
+                            currentState = State.U_STATE;
+                        }
+                        if(charFromClient == 'i' && currentState == State.U_STATE)
+                        {
+                            currentState = State.I_STATE;
+                        }
+                        if(charFromClient == 't' && currentState == State.I_STATE)
+                        {
+                            currentState = State.TERMINATE_STATE;
+                        }
 
-                        // Shut down thread if valid quit is recieved
-                        if( Character.toLowerCase(validCharArr[0]) == 'q' && Character.toLowerCase(validCharArr[1]) == 'u' && Character.toLowerCase(validCharArr[2]) == 'i' && Character.toLowerCase(validCharArr[3]) == 't')
+                        if(currentState == State.TERMINATE_STATE)
                         {
                             System.out.println("(Server) Client " + count + " is terminated");
                             threadRun = false;
                         }
-                        alphIndex++;
+
                     }
 
+                    // flush buffer
                     toClient.flush();
                 }
             }

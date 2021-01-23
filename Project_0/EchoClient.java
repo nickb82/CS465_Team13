@@ -25,6 +25,7 @@ public class EchoClient
             String input = scanner.nextLine();
 
             System.out.println("(Client) Write to Server");
+
             //Send user input to the server
             toServer.writeChars(input);
 
@@ -40,6 +41,8 @@ public class EchoClient
                 System.out.print(response[index]);
                 index++;
             }
+
+            //Used to clean display for return of server input
             System.out.println();
 
 
