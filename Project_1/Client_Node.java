@@ -1,18 +1,28 @@
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Scanner;
+import java.util.IOException;
+// import java.util.Scanner;
 
-public class Client_Node 
+
+public class Client_Node
 {
     int IP_Adress;
     int portNumber;
-    String clientName;
+    String clientName, messageToSend;
     ClientNode[] clientNameList;
+
+
+
+    // private String messageToSend
+
 
     CLient_Node(String name, int ipAdress, int portNum)
     {
         this.clientName = name;
         this.IP_Adress = ipAdress;
         this.protNumber = portNum;
+        this.messageToSend = messageToSend;
     }
 
     public String[] getClientNameList() 
@@ -42,33 +52,13 @@ public class Client_Node
     public updateList(String name)
     {
         
+        
+    }
+
+
+    public void Recieve_Thread(){
+        
     }
     
 }
 
-class Recieve_Thread implements Runnable
-{
-    ServerSocket;
-    Recieve_Thread(Socket socket)
-    {
-
-    }
-
-
-    while(true)
-    {
-
-    }
-
-}
-class Send_Thread implements Runnable
-{
-
-    Scanner scanInput = new Scanner(System.in);
-    System.out.println("To join the chat pleae enter: JOIN, followed by an IP Address and port number");
-    
-
-    String userInput = scanInput.nextline();
-    String argParse[] = userInput.split(" ");
-
-}
