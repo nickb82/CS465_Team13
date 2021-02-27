@@ -24,21 +24,22 @@ class Sender implements Runnable
         {
             while(true)
             {
-                ObjectOutputStream oos = new ObjectOutputStream(nodeSocket.getOutputStream());
-                ObjectInputStream ois = new ObjectInputStream(nodeSocket.getInputStream());
+                ObjectOutputStream writeToNet = new ObjectOutputStream(nodeSocket.getOutputStream());
+                ObjectInputStream readFromNet = new ObjectInputStream(nodeSocket.getInputStream());
 
+                //can be turned into a switch statement
                 if(message.equalsIgnoreCase("JOIN"))
                 {
                     //create JoinMessage Object
                     JoinMessage jMessage = new JoinMessage(myNode);
-                    oos.writeObject(jMessage);
+                    writeToNet.writeObject(jMessage);
                 }
 
                 if(message.equalsIgnoreCase("LEAVE"))
                 {
                     //create a LeaveMessage object
                     LeaveMessage lMessage = new LeaveMessage(myNode);
-                    oos.writeObject(lMessage);
+                    writeToNet.writeObject(lMessage);
                 }
                 
                 if(message.equalsIgnoreCase("NOTE"))
@@ -48,9 +49,10 @@ class Sender implements Runnable
 
                     //create a NoteMessage Object
                     NoteMessage nMessage = new NoteMessage(noteInput.toString());
-                    oos.writeObject(nMessage);
-
+                    writeToNet.writeObject(nMessage);
                 }
+
+                //create ois to grab updated list if sent by reciever
                 
                 break;
             }
