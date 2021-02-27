@@ -1,20 +1,30 @@
-import java.io.ServerSocket;
-import java.util.Scanner;
-import java.util.IOException;
+import java.io.*; 
+import java.util.*; 
+import java.net.*; 
 
-class Recieve_Thread implements Runnable
+
+
+class Reciever implements Runnable
 {
-    ServerSocket senderSocket = null;
+    //ServerSocket senderS;
     
+    // need worker thread within this thread
  
     public void run(){
 
-        try{
-            senderSocket = new ServerSocket(); 
+        try(ServerSocket senderS = new ServerSocket())
+        {
+            //server loop
+            while(true)
+            {
+                //spawn worker thread
+                break;
+            }
 
         }
 
-        catch(err){
+        catch(IOException err)
+        {
             System.out.println(err);
         }
 
