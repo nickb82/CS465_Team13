@@ -18,6 +18,7 @@ class Reciever implements Runnable
             while(true)
             {
                 //spawn worker thread
+                //Thread worker = new Thread();
                 break;
             }
 

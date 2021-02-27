@@ -5,18 +5,50 @@ import java.io.IOException;
 
 
 
-class sender implements Runnable
+class Sender implements Runnable
 {
+    String message;
+    NodeInfo myNode;
+
+    Sender(String userInput, NodeInfo nodeInfo)
+    {
+        this.message = userInput;
+        this.myNode = nodeInfo;
+    }
 
     //socket createdd
-    //Socket socket = new Socket(ipAdress, port);
+    //Socket nodeSocket = new Socket(ipAdress, port);
+    //ObjectInputStream ois = new ObjectInputStream(ndoeSocket.getInputStream());
+    //ObjectOutputStream oos = new ObjectOutputStream(nodeSocket);
 
 
     //receieve the result from the server
 
     public void run()
     {
-        System.out.println("Testing.....");
+        while(true)
+        {
+            if(message.equalsIgnoreCase("JOIN"))
+            {
+                //create JoinMessage Object
+            }
+
+            if(message.equalsIgnoreCase("LEAVE"))
+            {
+                //create a LeaveMessage object
+            }
+            
+            if(message.equalsIgnoreCase("NOTE"))
+            {
+                System.out.println("Enter a message into the chat:");
+                Scanner noteInput = new Scanner(System.in);
+
+                //create a NoteMessage Object
+
+            }
+            
+            break;
+        }
     }
     
 }
