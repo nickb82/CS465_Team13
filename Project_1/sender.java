@@ -5,7 +5,7 @@ import java.io.IOException;
 
 
 
-class Sender implements Runnable
+class Sender implements Runnable 
 {
     String message;
     NodeInfo myNode;
@@ -16,38 +16,49 @@ class Sender implements Runnable
         this.myNode = nodeInfo;
     }
 
-    //socket createdd
-    //Socket nodeSocket = new Socket(ipAdress, port);
-    //ObjectInputStream ois = new ObjectInputStream(ndoeSocket.getInputStream());
-    //ObjectOutputStream oos = new ObjectOutputStream(nodeSocket);
-
-
-    //receieve the result from the server
+    
 
     public void run()
     {
-        while(true)
+        try(Socket nodeSocket = new Socket())
         {
-            if(message.equalsIgnoreCase("JOIN"))
+            while(true)
             {
-                //create JoinMessage Object
-            }
+                ObjectOutputStream oos = new ObjectOutputStream(nodeSocket.getOutputStream());
+                ObjectInputStream ois = new ObjectInputStream(nodeSocket.getInputStream());
 
-            if(message.equalsIgnoreCase("LEAVE"))
-            {
-                //create a LeaveMessage object
-            }
-            
-            if(message.equalsIgnoreCase("NOTE"))
-            {
-                System.out.println("Enter a message into the chat:");
-                Scanner noteInput = new Scanner(System.in);
+                if(message.equalsIgnoreCase("JOIN"))
+                {
+                    //create JoinMessage Object
+                    JoinMessage jMessage = new JoinMessage(myNode);
+                    oos.writeObject(jMessage);
+                }
 
-                //create a NoteMessage Object
+                if(message.equalsIgnoreCase("LEAVE"))
+                {
+                    //create a LeaveMessage object
+                    LeaveMessage lMessage = new LeaveMessage(myNode);
+                    oos.writeObject(lMessage);
+                }
+                
+                if(message.equalsIgnoreCase("NOTE"))
+                {
+                    System.out.println("Enter a message into the chat:");
+                    Scanner noteInput = new Scanner(System.in);
 
+                    //create a NoteMessage Object
+                    NoteMessage nMessage = new NoteMessage(noteInput.toString());
+                    oos.writeObject(nMessage);
+
+                }
+                
+                break;
             }
-            
-            break;
+        }
+
+        catch(IOException err)
+        {
+            System.out.println(err);
         }
     }
     
