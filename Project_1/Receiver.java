@@ -6,7 +6,7 @@ import java.net.*;
 
 class Receiver extends Thread implements Serializable
 {
-    static ServerSocket receiverSocket = null;
+    public static ServerSocket receiverSocket = null;
     
     Receiver(NodeInfo nodeInfo)
     {
