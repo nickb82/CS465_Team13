@@ -9,6 +9,7 @@ class Sender extends Thread
 {
     String message;
     NodeInfo myNode;
+    // boolean hasJoined;
   
 
     public void run()
@@ -21,7 +22,7 @@ class Sender extends Thread
         {
             while(true)
             {
-                System.out.println("Please enter a message command (JOIN,JOINED,LEAVE,NOTE)");
+                System.out.println("Please enter a message command either JOIN or JOINED or LEAVE or NOTE)");
                 Scanner userInput = new Scanner(System.in);
                 String input = userInput.nextLine();
 
@@ -40,6 +41,7 @@ class Sender extends Thread
                 if(input.equalsIgnoreCase("LEAVE"))
                 {
                     //create a LeaveMessage object
+                    // hasJoined = false;
                     LeaveMessage lMessage = new LeaveMessage(myNode);
                     writeToNet.writeObject(lMessage);
                 }
