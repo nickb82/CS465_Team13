@@ -3,7 +3,7 @@ package Project1;
 public class NodeInfo
 {
     int portNum;
-    String clientName, messageToSend, IP_Adress;
+    String clientName, IP_Adress;
 
     NodeInfo(String name, String ipAdress, int portNum)
     {

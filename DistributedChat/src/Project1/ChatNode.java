@@ -14,6 +14,16 @@ public class ChatNode
     static Sender senderThread;
     static Receiver receiverThread;
 
+    public Vector<NodeInfo> getList()
+    {
+        return clientList;
+    }
+
+    public static void setList(Vecotr<NodeInfo> incomingList)
+    {
+        clientList = incomingList;
+    }
+
 
     public static void run()
     {
