@@ -1,7 +1,6 @@
 import java.io.*; 
 import java.util.*;
-import java.util.logging.Logger;
-import java.net.*; 
+import java.net.*;
 
 
 
@@ -18,7 +17,7 @@ class Receiver extends Thread implements Serializable
 
         catch(IOException ex)
         {
-            System.out.println("Creating Server Socket Failed";)
+            System.out.println("Creating Server Socket Failed");
         }
     }
  
@@ -30,6 +29,7 @@ class Receiver extends Thread implements Serializable
             {
                 //run receiver worker thread
 
+                (new ReceiverWorker(receiverSocket.accept())).start();
             }
 
             catch(IOException err)

@@ -1,4 +1,6 @@
-public class NoteMessage extends Message
+import java.io.Serializable;
+
+public class NoteMessage extends Message implements Serializable
 {
     String localMessage;
 

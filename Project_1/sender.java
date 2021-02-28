@@ -13,35 +13,45 @@ class Sender extends Thread
 
     public void run()
     {
+
+        ObjectOutputStream writeToNet;
+        ObjectInputStream readFromNet;
+
         try(Socket nodeSocket = new Socket())
         {
             while(true)
             {
-                ObjectOutputStream writeToNet = new ObjectOutputStream(nodeSocket.getOutputStream());
-                ObjectInputStream readFromNet = new ObjectInputStream(nodeSocket.getInputStream());
+                System.out.println("Please enter a message command (JOIN,JOINED,LEAVE,NOTE)");
+                Scanner userInput = new Scanner(System.in);
+                String input = userInput.nextLine();
+
+
+                writeToNet = new ObjectOutputStream(nodeSocket.getOutputStream());
+                readFromNet = new ObjectInputStream(nodeSocket.getInputStream());
 
                 //can be turned into a switch statement
-                if(message.equalsIgnoreCase("JOIN"))
+                if(input.startsWith("JOIN"))
                 {
                     //create JoinMessage Object
                     JoinMessage jMessage = new JoinMessage(myNode);
                     writeToNet.writeObject(jMessage);
                 }
 
-                if(message.equalsIgnoreCase("LEAVE"))
+                if(input.equalsIgnoreCase("LEAVE"))
                 {
                     //create a LeaveMessage object
                     LeaveMessage lMessage = new LeaveMessage(myNode);
                     writeToNet.writeObject(lMessage);
                 }
                 
-                if(message.equalsIgnoreCase("NOTE"))
+                if(input.equalsIgnoreCase("NOTE"))
                 {
                     System.out.println("Enter a message into the chat:");
-                    Scanner noteInput = new Scanner(System.in);
+                    userInput = new Scanner(System.in);
+                    message = userInput.nextLine();
 
                     //create a NoteMessage Object
-                    NoteMessage nMessage = new NoteMessage(noteInput.toString());
+                    NoteMessage nMessage = new NoteMessage(message);
                     writeToNet.writeObject(nMessage);
                 }
 
