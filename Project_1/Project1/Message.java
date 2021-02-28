@@ -1,3 +1,5 @@
+package Project1;
+
 public class Message 
 {
     String type;

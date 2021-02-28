@@ -1,3 +1,5 @@
+package Project1;
+
 import java.io.Serializable;
 
 public class NoteMessage extends Message implements Serializable

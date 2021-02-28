@@ -1,3 +1,5 @@
+package Project1;
+
 public class JoinMessage extends Message 
 {
     NodeInfo localNodeInfo;
