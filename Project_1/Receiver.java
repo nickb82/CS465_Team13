@@ -26,9 +26,16 @@ class Receiver extends Thread implements Serializable
 
         while(true)
         {
-            //spawn worker thread
-            //Thread worker = new Thread();
-            break;
+            try
+            {
+                //run receiver worker thread
+
+            }
+
+            catch(IOException err)
+            {
+                System.out.println("Error accpeting client");
+            }
         }
 
     }
