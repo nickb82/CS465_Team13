@@ -5,18 +5,11 @@ import java.io.IOException;
 
 
 
-class Sender implements Runnable 
+class Sender extends Thread 
 {
     String message;
     NodeInfo myNode;
-
-    Sender(String userInput, NodeInfo nodeInfo)
-    {
-        this.message = userInput;
-        this.myNode = nodeInfo;
-    }
-
-    
+  
 
     public void run()
     {
