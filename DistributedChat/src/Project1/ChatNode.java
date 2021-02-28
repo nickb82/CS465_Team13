@@ -9,7 +9,9 @@ public class ChatNode
 {
     static int myPortNum;
     static String myName, messageToSend, myIPAddress, input, argParse[];
-    static Vector<NodeInfo> clientList = new Vector<>();
+    public static Vector<NodeInfo> clientList = new Vector<>();
+
+    public static NodeInfo myInfo = null;
 
     static Sender senderThread;
     static Receiver receiverThread;
@@ -19,10 +21,10 @@ public class ChatNode
         return clientList;
     }
 
-    public static void setList(Vecotr<NodeInfo> incomingList)
+    /*public static void setList(Vector<NodeInfo> incomingList)
     {
         clientList = incomingList;
-    }
+    }*/
 
 
     public static void run()
@@ -49,7 +51,7 @@ public class ChatNode
         
 
         //create a new chat node to be added to the list
-        NodeInfo myInfo = new NodeInfo(myName, myIPAddress, myPortNum);
+        myInfo = new NodeInfo(myName, myIPAddress, myPortNum);
 
         (receiverThread = new Receiver(myInfo)).start();
         (senderThread = new Sender()).start();

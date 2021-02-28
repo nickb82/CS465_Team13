@@ -1,20 +1,21 @@
 package Project1;
 
-import java.io.*; 
 import java.util.*;
+import java.io.IOException;
 import java.net.*;
 
 
 
-class Receiver extends Thread implements Serializable
+class Receiver extends Thread 
 {
-    public static ServerSocket receiverSocket = null;
+     static ServerSocket receiverSocket = null;
     
     Receiver(NodeInfo nodeInfo)
     {
         try
         {
-            receiverSocket = new ServerSocket(nodeInfo.getPortNum());
+            System.out.println("Receiver:" + nodeInfo.getPortNum());
+            receiverSocket = new ServerSocket(8000);
         }
 
         catch(IOException ex)
@@ -36,7 +37,7 @@ class Receiver extends Thread implements Serializable
 
             catch(IOException err)
             {
-                System.out.println("Error accpeting client");
+                System.out.printf("Server Socket was not accepted");
             }
         }
 

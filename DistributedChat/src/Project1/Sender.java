@@ -1,9 +1,10 @@
 package Project1;
 
-import java.io.*; 
 import java.util.*; 
 import java.net.*; 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 
 
@@ -30,15 +31,13 @@ class Sender extends Thread
         NodeInfo participantInfo;
         Vector<NodeInfo> participantList;
 
-        ObjectOutputStream writeToNet;
-        ObjectInputStream readFromNet;
+        ObjectOutputStream writeToNet = null;
+        ObjectInputStream readFromNet = null;
 
         //run until SHUTDOWN command is called
         while(true)
         {
-            //ask the user for the type of message they would like to send
-            //System.out.println("Please enter a message command (JOIN,JOINED,LEAVE,NOTE,SHUTDOWN)");
-            //userInput = new Scanner(System.in);
+            
             input = userInput.nextLine();
 
 
@@ -47,12 +46,14 @@ class Sender extends Thread
             {
                 if(hasJoined)
                 {
-                    System.out.println("You have already joined the chat");
+                    //String error= "You have already joined the chat";
+                    //.log(error);
                     continue;
                 }
 
                 else
                 {
+                    //break down user input
                     String joinInput = userInput.nextLine();
                     String argParse[] = joinInput.split(" ");
 
@@ -66,7 +67,7 @@ class Sender extends Thread
                     catch(ArrayIndexOutOfBoundsException ex)
                     {
                         // Chat Node list is empty, so we assume we are the first to join
-                        System.out.pritnln("No informaation was given");
+                        //logger.log(ex);
                         ChatNode.clientList.add(ChatNode.myInfo);
                         hasJoined = true;
 
@@ -81,7 +82,7 @@ class Sender extends Thread
 
                     catch(IOException ex)
                     {
-                        System.out.pritnln("Could not connect to Sender Socket");
+                        //logger.log(ex);
                         continue;
                     }
 
@@ -93,20 +94,27 @@ class Sender extends Thread
                         readFromNet = new ObjectInputStream(senderSocket.getInputStream());
 
                         //send join request over streams
-                        writeToNet.writeObject(new JoinMessage(ChatNode.myInfo));
-                        ChatNode.setList(readFromNet.readObject());
+                        JoinMessage JMessage = new JoinMessage(ChatNode.myInfo);
+                        JMessage.setType("JOIN");
+                        writeToNet.writeObject(JMessage);
+                        
+                        try
+                        {
+                            ChatNode.clientList.add((NodeInfo)readFromNet.readObject());
+                        }
+
+                        catch(ClassNotFoundException nf)
+                        {
+                            System.out.printf("Sender: Error adding node to list");
+                        }
 
                         senderSocket.close();
                     }
 
                     catch(IOException ex)
                     {
-                        System.out.println("Issues with Output Stream and Input Stream in sender");
-                    }
-
-                    finally
-                    {
-                        senderSocket.close();
+                        
+                        System.out.printf("Issues with Output Stream and Input Stream in sender");
                     }
                 }
             }
@@ -115,26 +123,34 @@ class Sender extends Thread
             {
                 if(!hasJoined)
                 {
-                    System.out.pritnln("You have not joined the chat");
+                    System.out.printf("You have not joined the chat");
                     continue;
                 }
 
 
                 else if(input.startsWith("LEAVE"))
                 {
-                    //create a LeaveMessage object
-                    LeaveMessage lMessage = new LeaveMessage(ChatNode.myInfo);
-                    writeToNet.writeObject(lMessage);
-                    lMessage.setType("LEAVE");
-                    hasJoined = false;
-                    System.out.println("You have LEFT the chat");
-                    break;
+                    try
+                    {
+                        //create a LeaveMessage object
+                        LeaveMessage lMessage = new LeaveMessage(ChatNode.myInfo);
+                        lMessage.setType("LEAVE");
+                        writeToNet.writeObject(lMessage);
+                        hasJoined = false;
+                        System.out.printf("You have LEFT the chat");
+                        break;
+                    }
+
+                    catch(IOException ex)
+                    {
+                        System.out.printf("Sender: Error leaving the chat");
+                    }
                 }
 
                 //Shutdown the system
                 else
                 {
-                    System.out.println("Shuting down the system");
+                    System.out.printf("Shuting down the system");
                     System.exit(0);
                 }
             }
@@ -143,19 +159,27 @@ class Sender extends Thread
             {
                 if(hasJoined)
                 {
-                    System.out.println("Enter a message into the chat:");
-                    userInput = new Scanner(System.in);
-                    message = userInput.nextLine();
+                    try
+                    {
+                        System.out.printf("Enter a message into the chat:");
+                        userInput = new Scanner(System.in);
+                        message = userInput.nextLine();
 
-                    //create a NoteMessage Object
-                    NoteMessage nMessage = new NoteMessage(message);
-                    nMessage.setType("NOTE");
-                    writeToNet.writeObject(nMessage);
+                        //create a NoteMessage Object
+                        NoteMessage nMessage = new NoteMessage(message);
+                        nMessage.setType("NOTE");
+                        writeToNet.writeObject(nMessage);
+                    }
+
+                    catch(IOException ex)
+                    {
+                        System.out.printf("Sender: Error when creating NOTE");
+                    }
                 }
 
                 else
                 {
-                    System.out.println("Need to join chat first");
+                    System.out.printf("Need to join chat first");
                     continue;
                 }
 
@@ -165,13 +189,13 @@ class Sender extends Thread
             {
                 if(!hasJoined)
                 {
-                    System.out.println("Need to join chat first");
+                    System.out.printf("Need to join chat first");
                     continue;
                 }
 
                 else
                 {
-                    System.out.println("Please enter a valid command");
+                    System.out.printf("Please enter a valid command");
                     continue;
                 }
             }
