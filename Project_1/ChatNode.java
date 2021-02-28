@@ -16,7 +16,7 @@ public class ChatNode
     public static void run()
     {
         //ask for information and parse user input to crete a new node
-        System.out.println("Enter your Name and Port Number seperated by a space");
+        System.out.println("Enter your First Name and Port Number seperated by a space");
         Scanner userInput = new Scanner(System.in);
          String input = userInput.nextLine();
          String argParse[] = input.split(" ");
