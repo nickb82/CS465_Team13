@@ -53,8 +53,6 @@ class Sender extends Thread
 
                 else
                 {
-                    //System.out.println("Please enter a name, IP Address, and a port number (seperated by space) that you wish to connect with");
-                    //userInput = new Scanner(System.in);
                     String joinInput = userInput.nextLine();
                     String argParse[] = joinInput.split(" ");
 
@@ -105,15 +103,27 @@ class Sender extends Thread
                     {
                         System.out.println("Issues with Output Stream and Input Stream in sender");
                     }
+
+                    finally
+                    {
+                        senderSocket.close();
+                    }
                 }
             }
 
             else if(input.startsWith("LEAVE") || input.startsWith("SHUTDOWN"))
             {
-                if(input.startsWith("LEAVE"))
+                if(!hasJoined)
+                {
+                    System.out.pritnln("You have not joined the chat");
+                    continue;
+                }
+
+
+                else if(input.startsWith("LEAVE"))
                 {
                     //create a LeaveMessage object
-                    LeaveMessage lMessage = new LeaveMessage(myNode);
+                    LeaveMessage lMessage = new LeaveMessage(ChatNode.myInfo);
                     writeToNet.writeObject(lMessage);
                     lMessage.setType("LEAVE");
                     hasJoined = false;

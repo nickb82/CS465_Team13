@@ -9,9 +9,4 @@ public class JoinMessage extends Message
     {
         this.localNodeInfo = nodeInfo;
     }
-
-    public Vector<ChatNode> setList(Vector<ChatNode> list)
-    {
-
-    }
 }
