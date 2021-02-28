@@ -15,12 +15,12 @@ class Receiver extends Thread
         try
         {
             System.out.println("Receiver:" + nodeInfo.getPortNum());
-            receiverSocket = new ServerSocket(8000);
+            receiverSocket = new ServerSocket(nodeInfo.getPortNum());
         }
 
         catch(IOException ex)
         {
-            System.out.println("Creating Server Socket Failed");
+            System.out.printf("Creating Server Socket Failed");
         }
     }
  
