@@ -55,7 +55,7 @@ public class ReceiverWorker extends Thread
 
                 try
                 {
-                    //ChatNode.clientList.add(ChatNode.myInfo);
+                    ChatNode.clientList.add(ChatNode.myInfo);
                     writeToNet.writeObject(ChatNode.clientList);
                 }
 
@@ -65,12 +65,6 @@ public class ReceiverWorker extends Thread
                 }
                 
                 break;
-
-            case "JOINED" :
-
-            ChatNode.clientList.add(ChatNode.myInfo);
-
-            break;
             
             case "LEAVE" :
 
