@@ -15,12 +15,6 @@ class Sender extends Thread
     boolean hasJoined;
     String input;
 
-    public Sender()
-    {
-        userInput = new Scanner(System.in);
-        hasJoined = false;
-           
-    }
   
     @Override
     public void run()
@@ -29,14 +23,16 @@ class Sender extends Thread
         int joinPortNum;
 
         NodeInfo participantInfo;
-        Vector<NodeInfo> participantList;
 
         ObjectOutputStream writeToNet = null;
         ObjectInputStream readFromNet = null;
+        hasJoined = false;
 
         //run until SHUTDOWN command is called
         while(true)
         {
+            System.out.printf("Enter one of the following commands: JOIN, JOINED, LEAVE, NOTE\n");
+            userInput = new Scanner(System.in);
             
             input = userInput.nextLine();
 
@@ -46,8 +42,7 @@ class Sender extends Thread
             {
                 if(hasJoined)
                 {
-                    //String error= "You have already joined the chat";
-                    //.log(error);
+                    System.out.printf("You have already joined the chat");
                     continue;
                 }
 
@@ -67,7 +62,7 @@ class Sender extends Thread
                     catch(ArrayIndexOutOfBoundsException ex)
                     {
                         // Chat Node list is empty, so we assume we are the first to join
-                        //logger.log(ex);
+                        System.out.printf("First one to join!!!\n");
                         ChatNode.clientList.add(ChatNode.myInfo);
                         hasJoined = true;
 
@@ -109,6 +104,8 @@ class Sender extends Thread
                         }
 
                         senderSocket.close();
+                        writeToNet.close();
+                        readFromNet.close();
                     }
 
                     catch(IOException ex)
@@ -123,7 +120,7 @@ class Sender extends Thread
             {
                 if(!hasJoined)
                 {
-                    System.out.printf("You have not joined the chat");
+                    System.out.printf("You have not joined the chat\n");
                     continue;
                 }
 
@@ -137,7 +134,7 @@ class Sender extends Thread
                         lMessage.setType("LEAVE");
                         writeToNet.writeObject(lMessage);
                         hasJoined = false;
-                        System.out.printf("You have LEFT the chat");
+                        System.out.printf("You have LEFT the chat\n");
                         break;
                     }
 
@@ -160,8 +157,8 @@ class Sender extends Thread
                 if(hasJoined)
                 {
                     try
-                    {
-                        System.out.printf("Enter a message into the chat:");
+                    { 
+                        System.out.printf("Enter a message into the chat: ");
                         userInput = new Scanner(System.in);
                         message = userInput.nextLine();
 
@@ -179,7 +176,7 @@ class Sender extends Thread
 
                 else
                 {
-                    System.out.printf("Need to join chat first");
+                    System.out.printf("Need to join chat first\n");
                     continue;
                 }
 
@@ -189,18 +186,17 @@ class Sender extends Thread
             {
                 if(!hasJoined)
                 {
-                    System.out.printf("Need to join chat first");
+                    System.out.printf("Need to join chat first\n");
                     continue;
                 }
 
                 else
                 {
-                    System.out.printf("Please enter a valid command");
+                    System.out.printf("Please enter a valid command\n");
                     continue;
                 }
             }
             
         }
     }
-    
 }

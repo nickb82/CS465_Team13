@@ -79,6 +79,10 @@ public class ReceiverWorker extends Thread
             break;
 
             case "NOTE" :
+                
+                NoteMessage noteMessage = (NoteMessage)message;
+                String note = noteMessage.getMessage();
+                System.out.printf(note);
         }
 
     }
