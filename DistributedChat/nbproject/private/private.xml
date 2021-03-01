@@ -3,7 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/DistributedChat/src/Project1/JoinMessage.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/DistributedChat/src/Project1/LeaveMessage.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/DistributedChat/src/Project1/ChatNode.java</file>
             <file>file:/C:/CS465/GitHub/CS465_Team13/DistributedChat/src/Project1/Receiver.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/DistributedChat/src/Project1/Sender.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/DistributedChat/src/Project1/JoinedMessage.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/DistributedChat/src/Project1/ReceiverWorker.java</file>
         </group>
     </open-files>
 </project-private>

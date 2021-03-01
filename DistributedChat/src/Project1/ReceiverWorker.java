@@ -10,13 +10,15 @@ public class ReceiverWorker extends Thread
     ObjectOutputStream writeToNet = null;
     ObjectInputStream readFromNet = null;
     Message message = null;
+    Socket getConnection;
 
-    ReceiverWorker(Socket mySocket)
+    ReceiverWorker(Socket socket)
     {
+        this.getConnection = socket;
         try
         {
-            writeToNet = new ObjectOutputStream(mySocket.getOutputStream());
-            readFromNet = new ObjectInputStream(mySocket.getInputStream());
+            writeToNet = new ObjectOutputStream(getConnection.getOutputStream());
+            readFromNet = new ObjectInputStream(getConnection.getInputStream());
         }
 
         catch(IOException ex)
@@ -30,10 +32,9 @@ public class ReceiverWorker extends Thread
     {
         try
         {
-            if(readFromNet.available() > 0)
-            {
-               message = (Message)readFromNet.readObject();
-            }
+            
+            message = (Message)readFromNet.readObject();
+            
         }
 
         catch(IOException ex)
