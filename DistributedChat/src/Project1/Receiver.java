@@ -15,7 +15,6 @@ class Receiver extends Thread implements Serializable
     {
         try
         {
-            System.out.println("Receiver:" + nodeInfo.getPortNum());
             receiverSocket = new ServerSocket(nodeInfo.getPortNum());
         }
 

@@ -30,7 +30,10 @@ public class ReceiverWorker extends Thread
     {
         try
         {
-            message = (Message)readFromNet.readObject();
+            if(readFromNet.available() > 0)
+            {
+               message = (Message)readFromNet.readObject();
+            }
         }
 
         catch(IOException ex)
