@@ -23,7 +23,6 @@ public class ReceiverWorker extends Thread
         {
             System.out.println("Failed to open streams");
         }
-
     }
 
     @Override
@@ -32,22 +31,18 @@ public class ReceiverWorker extends Thread
         try
         {
             message = (Message)readFromNet.readObject();
-            System.out.printf("RW: message type is " + message.getType());
         }
 
         catch(IOException ex)
         {
-            System.out.printf("Failed to read from Object");
+            System.out.printf("Failed to read from Object IO ");
         }
 
         catch(ClassNotFoundException nf)
         {
-            System.out.printf("Failed to read from Object");
+            System.out.printf("Failed to read from Object CNF ");
         }
 
-        int index = 0;
-        String names = null;
-        NodeInfo particapantInfo = null;
 
         switch(message.getType())
         {

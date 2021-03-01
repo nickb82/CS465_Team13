@@ -29,6 +29,12 @@ class Sender extends Thread
 
         NodeInfo participantInfo;
 
+        name = ChatNode.myInfo.getName();
+        joinAddress = ChatNode.myInfo.getIPAdress();
+        joinPortNum = ChatNode.myInfo.getPortNum();
+
+        
+
         //run until SHUTDOWN command is called
         while(true)
         {
@@ -38,9 +44,7 @@ class Sender extends Thread
             input = userInput.nextLine();
 
             // gather node information
-            name = ChatNode.myInfo.getName();
-            joinAddress = ChatNode.myInfo.getIPAdress();
-            joinPortNum = ChatNode.myInfo.getPortNum();
+            
 
             //Crete Socket
             Socket senderSocket;
@@ -51,7 +55,7 @@ class Sender extends Thread
 
             catch(IOException ex)
             {
-                System.out.printf("Error with Socket");
+                System.out.printf("Error with Socket\n");
                 continue;
             }
 
@@ -91,6 +95,7 @@ class Sender extends Thread
                         JoinMessage jMessage = new JoinMessage();
                         jMessage.setType("JOIN");
                         jMessage.setNode(ChatNode.myInfo);
+                        System.out.printf("[CheckPoint] Sender: before jM write to stream");
                         writeToNet.writeObject(jMessage);
 
                         //recieve participant list
@@ -111,17 +116,20 @@ class Sender extends Thread
                         System.out.printf("Streams fail to open");
                     }
 
-                    /*try
+                    finally
                     {
-                        senderSocket.close();
-                        writeToNet.close();
-                        readFromNet.close();
-                    }
+                        try
+                        {
+                            senderSocket.close();
+                            writeToNet.close();
+                            readFromNet.close();
+                        }
 
-                    catch(IOException ex)
-                    {
-                        System.out.printf("Error trying to close streams and socket");
-                    }*/
+                        catch(IOException ex)
+                        {
+                            System.out.printf("Error trying to close streams and socket");
+                        }
+                    }
                     
                     
                 }
