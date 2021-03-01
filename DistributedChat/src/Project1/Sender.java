@@ -42,10 +42,7 @@ class Sender extends Thread
             userInput = new Scanner(System.in);
             
             input = userInput.nextLine();
-
-            // gather node information
             
-
             //Crete Socket
             Socket senderSocket;
             try
@@ -59,6 +56,7 @@ class Sender extends Thread
                 continue;
             }
 
+            // create input and out put streams
             try
             {
                 writeToNet = new ObjectOutputStream(senderSocket.getOutputStream());
@@ -71,7 +69,6 @@ class Sender extends Thread
             }
 
             //Start checking for each message command 
-            //can be turned into a switch statement
             if(input.startsWith("JOIN"))
             {
                 if(hasJoined)
@@ -108,6 +105,8 @@ class Sender extends Thread
                         {
                             System.out.printf("Could not update list through stream\n");
                         }
+                        
+                        //update list
                         ChatNode.clientList.addAll(updatedList);
                     }
 
@@ -116,6 +115,7 @@ class Sender extends Thread
                         System.out.printf("Streams fail to open");
                     }
 
+                    //close socket and streams
                     finally
                     {
                         try
@@ -147,23 +147,23 @@ class Sender extends Thread
 
                 else
                 {
+                    //create JoinedMessage and write to stream
+                    JoinedMessage jdMessage = new JoinedMessage();
+                    jdMessage.setType("JOINED");
+                    jdMessage.setNode(ChatNode.myInfo);
+                    
+                    try
+                    {
+                        writeToNet.writeObject(jdMessage);
+                    }
 
-                        JoinedMessage jdMessage = new JoinedMessage();
-                        jdMessage.setType("JOINED");
-                        jdMessage.setNode(ChatNode.myInfo);
-                        
-                        try
-                        {
-                            writeToNet.writeObject(jdMessage);
-                        }
+                    catch(IOException ex)
+                    {
+                        System.out.printf("Error trying to send JOINED message");
+                    }
 
-                        catch(IOException ex)
-                        {
-                            System.out.printf("Error trying to send JOINED message");
-                        }
-
-                        hasJoined = true;
-                        break;
+                    hasJoined = true;
+                    break;
 
                 }
 
@@ -182,7 +182,7 @@ class Sender extends Thread
                 {
                     try
                     {
-                        //create a LeaveMessage object
+                        //create a LeaveMessage object and write it to the stream
                         LeaveMessage lMessage = new LeaveMessage();
                         lMessage.setType("LEAVE");
                         lMessage.setNode(ChatNode.myInfo);
@@ -212,11 +212,12 @@ class Sender extends Thread
                 {
                     try
                     { 
+                        //Grab the users message and attach it to the NoteMessage Object
                         System.out.printf("Enter a message into the chat: ");
                         userInput = new Scanner(System.in);
                         message = ChatNode.myInfo.getName() + ": " + userInput.nextLine();
 
-                        //create a NoteMessage Object
+                        //create a NoteMessage Object and write it to the stream
                         NoteMessage nMessage = new NoteMessage(message);
                         nMessage.setType("NOTE");
                         nMessage.setNode(ChatNode.myInfo);
@@ -245,6 +246,7 @@ class Sender extends Thread
                     continue;
                 }
 
+                //if user has joined chat and entered an invalid message command
                 else
                 {
                     System.out.printf("Please enter a valid command\n");

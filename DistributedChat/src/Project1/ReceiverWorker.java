@@ -14,6 +14,7 @@ public class ReceiverWorker extends Thread
 
     ReceiverWorker(Socket socket)
     {
+        //create streams
         this.getConnection = socket;
         try
         {
@@ -32,7 +33,7 @@ public class ReceiverWorker extends Thread
     {
         try
         {
-            
+            // read incoming messages
             message = (Message)readFromNet.readObject();
             
         }
@@ -48,6 +49,7 @@ public class ReceiverWorker extends Thread
         }
 
 
+        //check which type of message was read and handle according to the type
         switch(message.getType())
         {
             case "JOIN" :
@@ -67,12 +69,14 @@ public class ReceiverWorker extends Thread
             
             case "LEAVE" :
 
+            //remove node from list
             ChatNode.clientList.remove(ChatNode.myInfo);
             
             break;
 
             case "NOTE" :
                 
+                //Grab message from object and print to the screen
                 NoteMessage noteMessage = (NoteMessage)message;
                 String note = noteMessage.getMessage();
                 System.out.printf(note);

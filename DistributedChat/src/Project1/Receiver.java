@@ -13,6 +13,7 @@ class Receiver extends Thread implements Serializable
     
     Receiver(NodeInfo nodeInfo)
     {
+        //crete ServerSocket
         try
         {
             receiverSocket = new ServerSocket(nodeInfo.getPortNum());
@@ -31,7 +32,6 @@ class Receiver extends Thread implements Serializable
             try
             {
                 //run receiver worker thread
-
                 (new ReceiverWorker(receiverSocket.accept())).start();
             }
 
