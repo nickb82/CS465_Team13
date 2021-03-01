@@ -1,13 +1,10 @@
 package Project1;
 
-public class LeaveMessage extends Message
+public class LeaveMessage extends Message implements Serializable
 {
-
-    NodeInfo localNodeInfo;
-
-    LeaveMessage(NodeInfo nodeInfo)
+    public void leaveAlert()
     {
-        this.localNodeInfo = nodeInfo;
+        System.out.printf("Attempting to leave chat");
     }
     
 }

@@ -2,11 +2,12 @@ package Project1;
 
 import java.util.*;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.*;
 
 
 
-class Receiver extends Thread 
+class Receiver extends Thread implements Serializable
 {
      static ServerSocket receiverSocket = null;
     

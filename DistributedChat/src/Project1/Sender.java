@@ -12,8 +12,13 @@ import java.io.ObjectOutputStream;
 class Sender extends Thread 
 {
     Scanner userInput;
-    boolean hasJoined;
+    boolean hasJoined = false;
     String input;
+    ObjectOutputStream writeToNet = null;
+    ObjectInputStream readFromNet = null;
+    Vector<NodeInfo> updatedList;
+
+
 
   
     @Override
@@ -24,10 +29,6 @@ class Sender extends Thread
 
         NodeInfo participantInfo;
 
-        ObjectOutputStream writeToNet = null;
-        ObjectInputStream readFromNet = null;
-        hasJoined = false;
-
         //run until SHUTDOWN command is called
         while(true)
         {
@@ -36,7 +37,36 @@ class Sender extends Thread
             
             input = userInput.nextLine();
 
+            // gather node information
+            name = ChatNode.myInfo.getName();
+            joinAddress = ChatNode.myInfo.getIPAdress();
+            joinPortNum = ChatNode.myInfo.getPortNum();
 
+            //Crete Socket
+            Socket senderSocket;
+            try
+            {
+                senderSocket = new Socket(joinAddress,joinPortNum); 
+            }
+
+            catch(IOException ex)
+            {
+                System.out.printf("Error with Socket");
+                continue;
+            }
+
+            try
+            {
+                writeToNet = new ObjectOutputStream(senderSocket.getOutputStream());
+                readFromNet = new ObjectInputStream(senderSocket.getInputStream());
+            }
+
+            catch(IOException ex)
+            {
+                System.out.println("Failed to open streams");
+            }
+
+            //Start checking for each message command 
             //can be turned into a switch statement
             if(input.startsWith("JOIN"))
             {
@@ -48,23 +78,7 @@ class Sender extends Thread
 
                 else
                 {
-                    name = ChatNode.myInfo.getName();
-                    joinAddress = ChatNode.myInfo.getIPAdress();
-                    joinPortNum = ChatNode.myInfo.getPortNum();
-
-
-                    //Crete Socket
-                    Socket senderSocket;
-                    try
-                    {
-                        senderSocket = new Socket(joinAddress,joinPortNum); 
-                    }
-
-                    catch(IOException ex)
-                    {
-                        System.out.printf("Error with Socket");
-                        continue;
-                    }
+                    
 
                     //send join request
                     try
@@ -74,13 +88,21 @@ class Sender extends Thread
                         readFromNet = new ObjectInputStream(senderSocket.getInputStream());
 
                         //send join request over streams
-                        JoinMessage JMessage = new JoinMessage(ChatNode.myInfo);
-                        JMessage.setType("JOIN");
-                        JMessage.setNode(ChatNode.myInfo);
-                        writeToNet.writeObject(JMessage);
+                        JoinMessage jMessage = new JoinMessage();
+                        jMessage.setType("JOIN");
+                        jMessage.setNode(ChatNode.myInfo);
+                        writeToNet.writeObject(jMessage);
 
                         //recieve participant list
-                        Vector<NodeInfo> updatedList = (Vector<NodeInfo>)readFromNet.readObject();
+                        try
+                        {
+                            updatedList = (Vector<NodeInfo>)readFromNet.readObject();
+                        }
+
+                        catch(ClassNotFoundException ex)
+                        {
+                            System.out.printf("Could not update list through stream\n");
+                        }
                         ChatNode.clientList.addAll(updatedList);
                     }
 
@@ -89,13 +111,54 @@ class Sender extends Thread
                         System.out.printf("Streams fail to open");
                     }
 
+                    /*try
+                    {
                         senderSocket.close();
                         writeToNet.close();
                         readFromNet.close();
+                    }
+
+                    catch(IOException ex)
+                    {
+                        System.out.printf("Error trying to close streams and socket");
+                    }*/
                     
                     
                 }
                 
+            }
+
+            else if(input.startsWith("JOINED"))
+            {
+
+                if(hasJoined)
+                {
+                    System.out.printf("You have already joined the chat\n");
+                    continue;
+                }
+
+                else
+                {
+
+                        JoinedMessage jdMessage = new JoinedMessage();
+                        jdMessage.setType("JOINED");
+                        jdMessage.setNode(ChatNode.myInfo);
+                        
+                        try
+                        {
+                            writeToNet.writeObject(jdMessage);
+                        }
+
+                        catch(IOException ex)
+                        {
+                            System.out.printf("Error trying to send JOINED message");
+                        }
+
+                        hasJoined = true;
+                        break;
+
+                }
+
             }
 
             else if(input.startsWith("LEAVE") || input.startsWith("SHUTDOWN"))
@@ -112,7 +175,7 @@ class Sender extends Thread
                     try
                     {
                         //create a LeaveMessage object
-                        LeaveMessage lMessage = new LeaveMessage(ChatNode.myInfo);
+                        LeaveMessage lMessage = new LeaveMessage();
                         lMessage.setType("LEAVE");
                         lMessage.setNode(ChatNode.myInfo);
                         writeToNet.writeObject(lMessage);

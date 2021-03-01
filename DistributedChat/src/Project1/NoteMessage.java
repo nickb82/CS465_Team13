@@ -4,16 +4,16 @@ import java.io.Serializable;
 
 public class NoteMessage extends Message implements Serializable
 {
-    String localMessage;
+    String message;
 
-    NoteMessage(String message)
+    NoteMessage(String localMessage)
     {
-        this.localMessage = message;
+        this.message = localMessage;
     }
 
     public String getMessage()
     {
-        return localMessage;
+        return message;
     }
     
 }

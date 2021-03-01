@@ -1,12 +1,9 @@
 package Project1;
 
-public class JoinMessage extends Message 
+public class JoinMessage extends Message implements Serializable
 {
-    NodeInfo localNodeInfo;
-    
-
-    JoinMessage(NodeInfo nodeInfo)
+    public void joinAlert()
     {
-        this.localNodeInfo = nodeInfo;
+        System.out.printf("Accessing list of participants");
     }
 }

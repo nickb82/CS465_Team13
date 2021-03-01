@@ -7,7 +7,6 @@ import java.net.*;
 
 public class ReceiverWorker extends Thread
 {
-    Socket getConnection = null;
     ObjectOutputStream writeToNet = null;
     ObjectInputStream readFromNet = null;
     Message message = null;
@@ -16,8 +15,8 @@ public class ReceiverWorker extends Thread
     {
         try
         {
-            writeToNet = new ObjectOutputStream(getConnection.getOutputStream());
-            readFromNet = new ObjectInputStream(getConnection.getInputStream());
+            writeToNet = new ObjectOutputStream(mySocket.getOutputStream());
+            readFromNet = new ObjectInputStream(mySocket.getInputStream());
         }
 
         catch(IOException ex)
@@ -33,6 +32,7 @@ public class ReceiverWorker extends Thread
         try
         {
             message = (Message)readFromNet.readObject();
+            System.out.printf("RW: message type is " + message.getType());
         }
 
         catch(IOException ex)
