@@ -11,5 +11,15 @@ package TS;
  */
 public class Message 
 {
+   String type;
    
+   public String getType()
+   {
+      return type;
+   }
+   
+   public void setType(String localType)
+   {
+      this.type = localType;
+   }
 }
