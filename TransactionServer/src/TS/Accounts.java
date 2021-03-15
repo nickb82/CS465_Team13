@@ -7,35 +7,29 @@ package TS;
 
 /**
  *
- * @author young
+ * @author Nick and Robel
  */
-public class Accounts 
-{
+public class Accounts {
    int balance;
    int accountID;
-   
-   public int getBalance()
-   {
+
+   public int getBalance() {
       return balance;
    }
-   
-   public void deposit(int num)
-   {
+
+   public void deposit(int num) {
       balance += num;
    }
-   
-   public void withdraw(int num)
-   {
+
+   public void withdraw(int num) {
       balance -= num;
    }
-   
-   public int getID()
-   {
+
+   public int getID() {
       return accountID;
    }
-   
-   public void setID(int newAccount)
-   {
+
+   public void setID(int newAccount) {
       this.accountID = newAccount;
    }
 }

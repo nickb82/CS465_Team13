@@ -7,25 +7,21 @@ package TS;
 
 /**
  *
- * @author young
+ * @author Nick and Robel
  */
-public class Transaction 
-{
+public class Transaction {
    int id;
    Accounts account;
-   
-   public int getID()
-   {
+
+   public int getID() {
       return id;
    }
-   
-   public void setID(int num)
-   {
+
+   public void setID(int num) {
       this.id = num;
    }
-   
-   public void abort()
-   {
-      
+
+   public void abort() {
+
    }
 }
