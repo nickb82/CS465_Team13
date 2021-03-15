@@ -9,7 +9,7 @@ package TS;
  *
  * @author young
  */
-public class TransactionServer 
+public class TransactionServerProxy 
 {
    
  public void openTransaction(int transID)
