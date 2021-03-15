@@ -22,12 +22,12 @@ public class TransactionServerProxy
     
  }
  
- public void read(Account acctNum)
+ public void read(Accounts acctNum)
  {
     acctNum.getBalance();
  }
  
- public void write(Account acctNum, int amount)
+ public void write(Accounts acctNum, int amount)
  {
     if(amount < 0)
     {

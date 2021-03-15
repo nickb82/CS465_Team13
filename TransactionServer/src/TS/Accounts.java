@@ -9,7 +9,7 @@ package TS;
  *
  * @author young
  */
-public class Account 
+public class Accounts 
 {
    int balance;
    int accountID;

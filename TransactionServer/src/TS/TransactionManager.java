@@ -9,23 +9,6 @@ package TS;
  *
  * @author young
  */
-public class Transaction 
-{
-   int id;
-   Accounts account;
+public class TransactionManager {
    
-   public int getID()
-   {
-      return id;
-   }
-   
-   public void setID(int num)
-   {
-      this.id = num;
-   }
-   
-   public void abort()
-   {
-      
-   }
 }

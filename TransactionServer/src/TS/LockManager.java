@@ -9,23 +9,7 @@ package TS;
  *
  * @author young
  */
-public class Transaction 
+public class LockManager 
 {
-   int id;
-   Accounts account;
    
-   public int getID()
-   {
-      return id;
-   }
-   
-   public void setID(int num)
-   {
-      this.id = num;
-   }
-   
-   public void abort()
-   {
-      
-   }
 }
