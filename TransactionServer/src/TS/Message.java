@@ -7,19 +7,16 @@ package TS;
 
 /**
  *
- * @author young
+ * @author Nick and Robel
  */
-public class Message 
-{
+public class Message {
    String type;
-   
-   public String getType()
-   {
+
+   public String getType() {
       return type;
    }
-   
-   public void setType(String localType)
-   {
+
+   public void setType(String localType) {
       this.type = localType;
    }
 }
