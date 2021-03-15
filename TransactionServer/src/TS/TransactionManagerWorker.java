@@ -7,7 +7,7 @@ package TS;
 
 /**
  *
- * @author young
+ * @author Nick and Robel
  */
 public class TransactionManagerWorker extends Thread
 {
