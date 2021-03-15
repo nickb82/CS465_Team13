@@ -9,6 +9,7 @@ package TS;
  *
  * @author Nick and Robel
  */
-public class TransactionManager {
-
+public class TransactionManager extends Thread
+{
+   
 }

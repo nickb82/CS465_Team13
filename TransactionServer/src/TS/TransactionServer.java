@@ -9,21 +9,25 @@ package TS;
  *
  * @author Nick and Robel
  */
-public class TransactionServerProxy {
+public class TransactionServer {
 
-   public void openTransaction(int transID) {
-
-   }
-
-   public void closeTransaction(int transID) {
+   public void openTransaction(int transID) 
+   {
 
    }
 
-   public void read(Accounts acctNum) {
+   public void closeTransaction(int transID) 
+   {
+
+   }
+
+   public void read(Accounts acctNum) 
+   {
       acctNum.getBalance();
    }
 
-   public void write(Accounts acctNum, int amount) {
+   public void write(Accounts acctNum, int amount) 
+   {
       if (amount < 0) {
          acctNum.withdraw(amount);
       }
@@ -32,6 +36,15 @@ public class TransactionServerProxy {
          acctNum.deposit(amount);
       }
 
+   }
+   
+   public void run()
+   {
+      //server loop
+      while(true)
+      {
+         
+      }
    }
 
 }

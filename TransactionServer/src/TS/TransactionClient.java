@@ -20,6 +20,7 @@ public class TransactionClient {
       System.out.println("Please enter one of the commands: OPEN, CLOSE, READ, WRITE");
       Scanner userInput = new Scanner(System.in);
       String input = userInput.nextLine();
+      
    }
 
 }

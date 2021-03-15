@@ -9,6 +9,7 @@ package TS;
  *
  * @author Nick and Robel
  */
-public class AccountManager {
+public class AccountManager extends Thread
+{
 
 }

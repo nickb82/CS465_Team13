@@ -9,6 +9,7 @@ package TS;
  *
  * @author Nick and Robel
  */
-public class LockManager {
+public class LockManager extends Thread
+{
 
 }
