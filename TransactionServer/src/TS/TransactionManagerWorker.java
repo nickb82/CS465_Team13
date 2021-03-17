@@ -5,11 +5,22 @@
  */
 package TS;
 
+import java.net.Socket;
+
 /**
  *
  * @author Nick and Robel
  */
 public class TransactionManagerWorker extends Thread
 {
+   Socket clientSocket;
+   TransactionManagerWorker(Socket localClientSocket)
+   {
+      clientSocket = localClientSocket;
+   }
    
+   public void run()
+   {
+      
+   }
 }

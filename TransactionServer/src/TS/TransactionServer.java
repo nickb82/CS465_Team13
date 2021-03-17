@@ -21,23 +21,6 @@ public class TransactionServer {
 
    }
 
-   public void read(Accounts acctNum) 
-   {
-      acctNum.getBalance();
-   }
-
-   public void write(Accounts acctNum, int amount) 
-   {
-      if (amount < 0) {
-         acctNum.withdraw(amount);
-      }
-
-      else if (amount > 0) {
-         acctNum.deposit(amount);
-      }
-
-   }
-   
    public void run()
    {
       //server loop

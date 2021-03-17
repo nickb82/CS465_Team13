@@ -13,15 +13,35 @@ public class Transaction {
    int id;
    Accounts account;
 
-   public int getID() {
+   public int getID() 
+   {
       return id;
    }
 
-   public void setID(int num) {
+   public void setID(int num) 
+   {
       this.id = num;
    }
 
-   public void abort() {
+   public void abort() 
+   {
+
+   }
+   
+   public void read(Accounts acctNum) 
+   {
+      acctNum.getBalance();
+   }
+   
+   public void write(Accounts acctNum, int amount) 
+   {
+      if (amount < 0) {
+         acctNum.withdraw(amount);
+      }
+
+      else if (amount > 0) {
+         acctNum.deposit(amount);
+      }
 
    }
 }

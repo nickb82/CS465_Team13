@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/TransactionServer/src/TS/TransactionServerProxy.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/TransactionServer/src/TS/AccountManager.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/TransactionServer/src/TS/LockManager.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/TransactionServer/src/TS/Message.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/TransactionServer/src/TS/TransactionManager.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/TransactionServer/src/TS/TransactionManagerWorker.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/TransactionServer/src/TS/TransactionServer.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/TransactionServer/src/TS/Locks.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/TransactionServer/src/TS/Transaction.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/TransactionServer/src/TS/Accounts.java</file>
+            <file>file:/C:/CS465/GitHub/CS465_Team13/TransactionServer/src/TS/TransactionClient.java</file>
+        </group>
+    </open-files>
+</project-private>
