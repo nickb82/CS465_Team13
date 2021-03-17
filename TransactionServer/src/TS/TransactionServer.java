@@ -5,12 +5,15 @@
  */
 package TS;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+
 /**
  *
  * @author Nick and Robel
  */
-public class TransactionServer {
-
+public class TransactionServer 
+{
    public void openTransaction(int transID) 
    {
 
@@ -23,11 +26,17 @@ public class TransactionServer {
 
    public void run()
    {
-      //server loop
-      while(true)
+      
+      try(ServerSocket serverSocket = new ServerSocket())
       {
          
       }
+      
+      catch(IOException ioe)
+      {
+         System.out.println(ioe);
+      }
+         
    }
 
 }

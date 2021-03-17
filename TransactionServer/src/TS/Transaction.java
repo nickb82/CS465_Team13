@@ -11,6 +11,8 @@ package TS;
  */
 public class Transaction {
    int id;
+   //list of locks
+   //logging information
    Accounts account;
 
    public int getID() 
