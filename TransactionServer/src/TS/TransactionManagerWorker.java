@@ -21,6 +21,11 @@ public class TransactionManagerWorker extends Thread
    
    public void run()
    {
-      
+      //loop that reads messages, coming from client & translates
+      //them into high-level actions
+      while(true)
+      {
+         
+      }
    }
 }

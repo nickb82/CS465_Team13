@@ -11,5 +11,6 @@ package TS;
  */
 public class AccountManager extends Thread
 {
-
+   //list of accounts
+   Accounts[] accountList;
 }

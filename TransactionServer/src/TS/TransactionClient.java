@@ -13,9 +13,19 @@ import java.util.Scanner;
  */
 public class TransactionClient {
 
-   /**
-    * @param args the command line arguments
-    */
+   public void createMessage(String type)
+   {
+      if(type == "OPEN")
+      {
+         
+      }
+   }
+   
+   public void openTransaction()
+   {
+      createMessage("OPEN");
+   }
+   
    public static void main(String[] args) 
    {
       System.out.println("Please enter one of the commands: OPEN, CLOSE, READ, WRITE");

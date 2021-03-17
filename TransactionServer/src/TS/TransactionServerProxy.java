@@ -11,5 +11,21 @@ package TS;
  */
 public class TransactionServerProxy 
 {
+   public void createMessage(String type)
+   {
+      if(type == "OPEN")
+      {
+         
+      }
+   }
    
+   public void openTransaction()
+   {
+      createMessage("OPEN");
+   }
+   
+   TransactionServerProxy(Message clientMess)
+   {
+      
+   }
 }
