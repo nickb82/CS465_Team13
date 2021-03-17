@@ -13,18 +13,6 @@ import java.util.Scanner;
  */
 public class TransactionClient {
 
-   public void createMessage(String type)
-   {
-      if(type == "OPEN")
-      {
-         
-      }
-   }
-   
-   public void openTransaction()
-   {
-      createMessage("OPEN");
-   }
    
    public static void main(String[] args) 
    {
