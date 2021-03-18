@@ -14,15 +14,6 @@ import java.net.ServerSocket;
  */
 public class TransactionServer 
 {
-   public void openTransaction(int transID) 
-   {
-
-   }
-
-   public void closeTransaction(int transID) 
-   {
-
-   }
 
    public void run()
    {

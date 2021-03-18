@@ -5,12 +5,16 @@
  */
 package TS;
 
+import java.io.ObjectOutputStream;
+
 /**
  *
  * @author Nick and Robel
  */
 public class TransactionServerProxy 
 {
+   Message clientMessage;
+   ObjectOutputStream op;
    public void createMessage(String type)
    {
       if(type == "OPEN")
@@ -24,7 +28,7 @@ public class TransactionServerProxy
       createMessage("OPEN");
    }
    
-   TransactionServerProxy(Message clientMess)
+   TransactionServerProxy()
    {
       
    }

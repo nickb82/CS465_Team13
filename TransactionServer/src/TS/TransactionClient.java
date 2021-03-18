@@ -16,9 +16,15 @@ public class TransactionClient {
    
    public static void main(String[] args) 
    {
+      TransactionServerProxy tsp = new TransactionServerProxy();
       System.out.println("Please enter one of the commands: OPEN, CLOSE, READ, WRITE");
       Scanner userInput = new Scanner(System.in);
       String input = userInput.nextLine();
+      
+      if(input == "OPEN")
+      {
+         tsp.openTransaction();
+      }
       
    }
 
