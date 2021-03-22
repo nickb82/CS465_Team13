@@ -5,6 +5,9 @@
  */
 package TS;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
@@ -14,6 +17,8 @@ import java.net.Socket;
 public class TransactionManagerWorker extends Thread
 {
    Socket clientSocket;
+   ObjectOutputStream writeToNet;
+   ObjectInputStream readFromNet;
    TransactionManagerWorker(Socket localClientSocket)
    {
       clientSocket = localClientSocket;
@@ -25,7 +30,15 @@ public class TransactionManagerWorker extends Thread
       //them into high-level actions
       while(true)
       {
-         
+         try
+         {
+            readFromNet = new ObjectInputStream(clientSocket.getInputStream());
+            writeToNet = new ObjectOutputStream(clientSocket.getOutputStream());
+         }
+         catch(IOException ioe)
+         {
+            
+         }
       }
    }
 }

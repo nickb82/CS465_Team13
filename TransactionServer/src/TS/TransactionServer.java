@@ -7,6 +7,7 @@ package TS;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  *
@@ -20,7 +21,9 @@ public class TransactionServer
       
       try(ServerSocket serverSocket = new ServerSocket())
       {
+         Socket clientSocket = serverSocket.accept();
          
+         TransactionManager tranMan = new TransactionManager(clientSocket);
       }
       
       catch(IOException ioe)

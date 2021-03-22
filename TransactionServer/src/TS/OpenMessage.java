@@ -13,5 +13,7 @@ public class OpenMessage extends Message
 {
    String TYPE = "OPEN";
    
+ 
+   
    
 }

@@ -13,7 +13,7 @@ public class Transaction {
    int id;
    //list of locks
    //logging information
-   Accounts account;
+   Account account;
 
    public int getID() 
    {
@@ -30,12 +30,12 @@ public class Transaction {
 
    }
    
-   public void read(Accounts acctNum) 
+   public void read(Account acctNum) 
    {
       acctNum.getBalance();
    }
    
-   public void write(Accounts acctNum, int amount) 
+   public void write(Account acctNum, int amount) 
    {
       if (amount < 0) {
          acctNum.withdraw(amount);
