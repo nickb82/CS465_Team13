@@ -5,6 +5,8 @@
  */
 package TS;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Nick and Robel
@@ -12,8 +14,15 @@ package TS;
 public class Transaction {
    int id;
    //list of locks
+   static ArrayList<Lock> holds = new ArrayList<>();
+   static ArrayList<String> info = new ArrayList<>();
    //logging information
    Account account;
+   
+   Transaction(int transactionID)
+   {
+      this.id = transactionID;
+   }
 
    public int getID() 
    {
@@ -45,5 +54,10 @@ public class Transaction {
          acctNum.deposit(amount);
       }
 
+   }
+   
+   public void log(String logInfo)
+   {
+      info.add(logInfo);
    }
 }

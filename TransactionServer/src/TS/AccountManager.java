@@ -33,13 +33,28 @@ public class AccountManager extends Thread
       }
    }
    
-   public Account getAccount(int accountNumber)
+   public Account getAccount(int accountID)
    {
-      return accountList.get(accountNumber);
+      return accountList.get(accountID);
    }
    
    public ArrayList<Account> getAccountList()
    {
       return accountList;
+   }
+   
+   public int read(int accountID)
+   {
+      return (getAccount(accountID))._read();
+   }
+   
+   public int write(int accountID, Transaction transaction, int balance)
+   {
+      Account account = getAccount(accountID);
+      
+      (TransactionServer.lockManager).lock(account,transaction,WRITE_LOCK);
+      
+      account.setBalance(balance);
+      return balance;
    }
 }

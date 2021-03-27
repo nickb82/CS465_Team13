@@ -11,20 +11,18 @@ import java.util.Scanner;
  *
  * @author Nick and Robel
  */
-public class TransactionClient {
-
+public class TransactionClient extends Thread
+{
+   public static int numberTransaction;
+   public static int numberAccounts;
+   public static int initialBalance;
    
-   public static void main(String[] args) 
+   public static String host;
+   public static int port;
+   
+   
+   public static void mani(String[] args)
    {
-      TransactionServerProxy tsp = new TransactionServerProxy();
-      System.out.println("Please enter one of the commands: OPEN, CLOSE, READ, WRITE");
-      Scanner userInput = new Scanner(System.in);
-      String input = userInput.nextLine();
-      
-      if(input == "OPEN")
-      {
-         tsp.openTransaction();
-      }
       
    }
 
