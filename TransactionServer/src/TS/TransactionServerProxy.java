@@ -6,6 +6,7 @@
 package TS;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -14,39 +15,103 @@ import java.net.Socket;
  *
  * @author Nick and Robel
  */
-public class TransactionServerProxy 
+public class TransactionServerProxy implements MessageType
 {
    Message clientMessage;
-   OpenMessage opMess;
    InetAddress IPAdress;
-   int portNum;
+   String host;
+   int transID;
+   public int portNum;
+   Socket connection;
 
    public ObjectOutputStream writeToNet = null;
-   public void createMessage(String type)
+   public ObjectInputStream readFromNet = null;
+   
+   TransactionServerProxy(String host, int port)
    {
-      if(type == "OPEN")
+      this.host = host;
+      portNum = port;
+   }
+   
+   public int openTransaction()
+   {
+      Message openTransMess = new Message(OPEN_TRANSACTION,null);
+      
+      try
       {
-         try(Socket senderSocket = new Socket(IPAdress,portNum))
-         {
-            clientMessage.setType(type);
-            writeToNet = new ObjectOutputStream(senderSocket.getOutputStream());
-            writeToNet.writeObject(clientMessage);
-         }
+         connection = new Socket(host,portNum);
+         writeToNet = new ObjectOutputStream(connection.getOutputStream());
+         readFromNet = new ObjectInputStream(connection.getInputStream());
          
-         catch(IOException ioe)
-         {
-            System.out.println(ioe);
-         }
+         writeToNet.writeObject(openTransMess);
+         transID = (Integer) readFromNet.readObject();
+      }
+      catch(Exception ex)
+      {
+         System.out.println("[TransactionServerProxy] Error trying to create openTransaction Message");
+         ex.printStackTrace();
+      }
+      
+      return transID;
+   }
+   
+   public void closeTransaction()
+   {
+      Message closeTransMess = new Message(CLOSE_TRANSACTION, null);
+      
+      try
+      {
+         writeToNet.writeObject(closeTransMess);
+         
+         readFromNet.close();
+         writeToNet.close();
+         connection.close();
+      }
+      
+      catch(Exception ex)
+      {
+         System.out.println("[TransactionServerProxy] Error trying to close transaction");
+         ex.printStackTrace();
       }
    }
    
-   public void openTransaction()
+   public int read(int accountNumber)
    {
-      createMessage("OPEN");
+      Message message = new Message(READ_REQUEST,null);
+      
+      try
+      {
+         writeToNet.writeObject(message);
+         message = (Message) readFromNet.readObject();
+      }
+      
+      catch(Exception ex)
+      {
+         System.out.println("[TransactionServerProxy] Error trying to read");
+         ex.printStackTrace();
+      }
+      
+      return (Integer) message.getContent();
    }
    
-   TransactionServerProxy()
+   public int write(int accountNumber, int amount)
    {
+      Object[] content = new Object[]{accountNumber, amount};
+      Message message = new Message(WRITE_REQUEST, content);
       
+      try
+      {
+         writeToNet.writeObject(message);
+         message = (Message) readFromNet.readObject();
+      }
+      
+      catch(IOException ioe)
+      {
+         System.out.println("[TransactionServerProxy] Error when trying to write");
+         ioe.printStackTrace();
+      }
+      
+      return (Integer) message.getContent();
    }
+   
 }

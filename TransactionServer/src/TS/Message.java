@@ -5,11 +5,13 @@
  */
 package TS;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Nick and Robel
  */
-public class Message implements MessageType
+public class Message implements MessageType,Serializable
 {
    // set type to integer for symbolic constent
    int type;

@@ -21,4 +21,9 @@ public interface MessageType
    public static final int READ_REQUEST_RESPONSE = 6;
    public static final int WRITE_REQUEST_RESPONSE = 7;
    
+   public static final int TRANSACTION_COMPLETED = 8;
+   public static final int TRANSACTION_ABORTED = 9;
+   
+   public static final int SHUTDOWN = 10;
+   
 }
