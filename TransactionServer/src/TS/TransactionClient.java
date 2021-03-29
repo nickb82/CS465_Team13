@@ -114,7 +114,7 @@ public class TransactionClient implements Runnable, MessageType
          int amount;
          int balance;
          
-         int returnStatus = TRANSACTION_ABORTED;
+         int status = TRANSACTION_ABORTED;
          
          //randomize transfers between accounts and randomize initial balance
          accountFrom = (int) Math.floor(Math.random() + numberAccounts);
@@ -131,7 +131,7 @@ public class TransactionClient implements Runnable, MessageType
             Logger.getLogger(TransactionClient.class.getName()).log(Level.SEVERE, "[TransactionClient] Error trying to sleep thread", ex);
          }
          
-         while(returnStatus != TRANSACTION_COMPLETED)
+         while(status != TRANSACTION_COMPLETED)
          {
             TransactionServerProxy transProxy = new TransactionServerProxy(host,port);
             transID = transProxy.openTransaction();
@@ -149,7 +149,7 @@ public class TransactionClient implements Runnable, MessageType
             
             //no deadlock, close transaction
             System.out.println("Transaction #" + transID + " completed");
-            returnStatus = TRANSACTION_COMPLETED;
+            status = TRANSACTION_COMPLETED;
          }
          
          
