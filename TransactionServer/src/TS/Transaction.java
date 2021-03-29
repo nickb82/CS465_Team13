@@ -60,4 +60,14 @@ public class Transaction {
    {
       info.add(logInfo);
    }
+   
+   public ArrayList<String> getLog()
+   {
+      return info;
+   }
+   
+   public void remove(Transaction trans)
+   {
+      holds.remove(trans);
+   }
 }

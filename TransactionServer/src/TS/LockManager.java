@@ -16,6 +16,12 @@ public class LockManager
 {
    //transID/lockType ?
    private Hashtable theLocks;
+   public boolean lockOn = false;
+   
+   public LockManager(boolean lockOn)
+   {
+      this.lockOn = lockOn;
+   }
    
    // object is lock object?
    public void setLock(Object object, Transaction trans, LockType lockType)

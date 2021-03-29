@@ -43,16 +43,22 @@ public class AccountManager extends Thread
       return accountList;
    }
    
-   public int read(int accountID)
+   public int read(int accountID, Transaction transaction)
    {
-      return (getAccount(accountID))._read();
+      LockType lockType = new LockType();
+      lockType.setType(1);
+      Account account = getAccount(accountID);
+      (TransactionServer.lockManager).setLock(account, transaction, lockType);
+      return (getAccount(accountID)).getBalance();
    }
    
    public int write(int accountID, Transaction transaction, int balance)
    {
       Account account = getAccount(accountID);
+      LockType lockType = new LockType();
+      lockType.setType(2);
       
-      (TransactionServer.lockManager).lock(account,transaction,WRITE_LOCK);
+      (TransactionServer.lockManager).setLock(account,transaction,lockType);
       
       account.setBalance(balance);
       return balance;

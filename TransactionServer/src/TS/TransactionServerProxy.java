@@ -105,10 +105,10 @@ public class TransactionServerProxy implements MessageType
          message = (Message) readFromNet.readObject();
       }
       
-      catch(IOException ioe)
+      catch(IOException | ClassNotFoundException ex)
       {
          System.out.println("[TransactionServerProxy] Error when trying to write");
-         ioe.printStackTrace();
+         ex.printStackTrace();
       }
       
       return (Integer) message.getContent();

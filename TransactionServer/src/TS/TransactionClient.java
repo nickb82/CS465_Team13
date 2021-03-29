@@ -48,8 +48,8 @@ public class TransactionClient implements Runnable, MessageType
          initialBalance = Integer.parseInt(serverProp.getProperty("INITIAL_BALANCE"));
          
          clientProp = new PropertyHandler(clientPropertiesFile);
-         numberTransaction = Integer.parseInt(clientProp.getProperty("NUMBER_TRANSACTION"));
-         sleepMilliseconds = Integer.parseInt(clientProp.getProperty("SLEEP_MILLISECONDS"));
+         numberTransaction = Integer.parseInt(clientProp.getProperty("NUMBER_TRANSACTIONS"));
+         
       }
       
       catch(IOException | NumberFormatException ex)
@@ -106,7 +106,7 @@ public class TransactionClient implements Runnable, MessageType
       public void run()
       {
          int transID;
-         int priorTransID = -1;
+         //int priorTransID = -1;
          
          int accountFrom;
          int accountTo;
@@ -136,11 +136,20 @@ public class TransactionClient implements Runnable, MessageType
             TransactionServerProxy transProxy = new TransactionServerProxy(host,port);
             transID = transProxy.openTransaction();
             
-            // if this our first transaction 
-            if(priorTransID = -1)
+            
+            try
             {
-               
+               balance = transProxy.read(accountFrom);
+               transProxy.write(accountTo, balance + amount);
             }
+            catch(Exception ex)
+            {
+               System.out.print("Transaction ID" + transID + "had an error that maybe due to deadlocks");
+            }
+            
+            //no deadlock, close transaction
+            System.out.println("Transaction #" + transID + " completed");
+            returnStatus = TRANSACTION_COMPLETED;
          }
          
          
@@ -149,7 +158,7 @@ public class TransactionClient implements Runnable, MessageType
    
    public static void main(String[] args)
    {
-      ().start
+      (new TransactionClient("C:\\CS465\\GitHub\\CS465_Team13\\TransactionServer\\src\\TS\\TransactionClient.properties","C:\\CS465\\GitHub\\CS465_Team13\\TransactionServer\\src\\TS\\TransactionServer.properties")).run();
    }
 
 }

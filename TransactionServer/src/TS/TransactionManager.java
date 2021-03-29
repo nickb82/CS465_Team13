@@ -111,7 +111,7 @@ public class TransactionManager implements MessageType
                   
                case CLOSE_TRANSACTION:
                   
-                  LockManager.unLock(transaction);
+                  TransactionServer.lockManager.unLock(transaction);
                   transaction.remove(transaction);
                   
                   try
@@ -129,10 +129,10 @@ public class TransactionManager implements MessageType
                   
                   transaction.log("[TransactionManagerWorker.run] CLOSE_TRANSACTION #" + transaction.getID());
                   
-                  if(TransactionServer.transactionView)
+                  /*if(TransactionServer.transactionView)
                   {
                      System.out.println(transaction.getLog());
-                  }
+                  }*/
                   
                   break;
                   
@@ -140,10 +140,10 @@ public class TransactionManager implements MessageType
                   
                   // get content is not a string?
                   //accountNumber = (Integer) message.getContent();
-                  accountNumber = Integer.parseInt(message.getContent());
+                  accountNumber = (Integer) message.getContent();
                   transaction.log("[TransactionManagerWorker.run] READ_REQUEST ------- account #" + accountNumber + "balance $" + balance);
                   
-                  balance = TransactionServer.AccountManger.read(accountNumber, transaction);
+                  balance = TransactionServer.acctManager.read(accountNumber, transaction);
                   
                   try
                   {
@@ -166,7 +166,7 @@ public class TransactionManager implements MessageType
                   balance = (Integer) content[1];
                   transaction.log("[TransactionmanagerWorker.run] WRITE_REQUEST ----- account #" + accountNumber + ", new balance: " + balance);
                   
-                  balance = TransactionServer.AccountManager.write(accountNumber, transaction, balance);
+                  balance = TransactionServer.acctManager.write(accountNumber, transaction, balance);
                   
                   try
                   {
