@@ -92,6 +92,6 @@ public class TransactionServer extends Thread
    
    public static void main(String[] args)
    {
-      
+      new TransactionServer("C:\\CS465\\GitHub\\CS465_Team13\\TransactionServer\\src\\TS\\TransactionServer.properties").start();
    }
 }
