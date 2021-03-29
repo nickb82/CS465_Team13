@@ -74,7 +74,7 @@ public class TransactionClient implements Runnable, MessageType
          currentThread.start();
          transCount++;
       }
-      transCount = 0;
+      
       
       //create iterator for list of threads
       Iterator <Thread> threadIterator = threads.iterator();
@@ -144,7 +144,7 @@ public class TransactionClient implements Runnable, MessageType
             }
             catch(Exception ex)
             {
-               System.out.print("Transaction ID" + transID + "had an error that maybe due to deadlocks");
+               System.out.print("Transaction ID " + transID + " had an error that maybe due to deadlocks");
             }
             
             //no deadlock, close transaction
