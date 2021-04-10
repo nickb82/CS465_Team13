@@ -17,6 +17,7 @@ import java.net.UnknownHostException;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Properties;
 import utils.PropertyHandler;
 
 /**
@@ -35,19 +36,63 @@ public class Satellite extends Thread {
 
     public Satellite(String satellitePropertiesFile, String classLoaderPropertiesFile, String serverPropertiesFile) {
 
+       String satelliteName;
+       int satellitePort;
+       
+       String serverHost;
+       int serverPort;
         // read this satellite's properties and populate satelliteInfo object,
         // which later on will be sent to the server
         // ...
+        try 
+        {
+            Properties satelliteProperties;
+            satelliteProperties = new PropertyHandler(satellitePropertiesFile);
+            satelliteName = satelliteProperties.getProperty("NAME");
+            satellitePort =  Integer.parseInt(satelliteProperties.getProperty("PORT"));
+            satelliteInfo.setName(satelliteName);
+            satelliteInfo.setPort(satellitePort);
+
+        } catch (Exception e) 
+        {
+            System.err.println("Properties file " + satellitePropertiesFile + " not found, exiting ...");
+            System.exit(1);
+        }
         
         
         // read properties of the application server and populate serverInfo object
         // other than satellites, the as doesn't have a human-readable name, so leave it out
         // ...
         
+        try 
+        {
+            Properties serverProperties;
+            serverProperties = new PropertyHandler(serverPropertiesFile);
+            serverHost = serverProperties.getProperty("HOST");
+            serverPort =  Integer.parseInt(serverProperties.getProperty("PORT"));
+            satelliteInfo.setHost(serverHost);
+            satelliteInfo.setPort(serverPort);
+
+        }
+        catch (Exception e) 
+        {
+            System.err.println("Properties file " + serverPropertiesFile + " not found, exiting ...");
+            System.exit(1);
+        }
         
         // read properties of the code server and create class loader
         // -------------------
         // ...
+        
+        try
+        {
+           classLoader.loadClass(classLoaderPropertiesFile);
+        }
+        catch (Exception e) 
+        {
+            System.err.println("Properties file " + classLoaderPropertiesFile + " not found, exiting ...");
+            System.exit(1);
+        }
 
         
         // create tools cache
