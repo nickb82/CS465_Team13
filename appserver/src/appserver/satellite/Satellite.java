@@ -58,7 +58,9 @@ public class Satellite extends Thread {
             satelliteInfo.setName(satelliteName);
             satelliteInfo.setPort(satellitePort);
 
-        } catch (Exception e) 
+        } 
+        
+        catch (Exception e) 
         {
             System.err.println("Properties file " + satellitePropertiesFile + " not found, exiting ...");
             System.exit(1);
@@ -75,8 +77,8 @@ public class Satellite extends Thread {
             serverProperties = new PropertyHandler(serverPropertiesFile);
             serverHost = serverProperties.getProperty("HOST");
             serverPort =  Integer.parseInt(serverProperties.getProperty("PORT"));
-            satelliteInfo.setHost(serverHost);
-            satelliteInfo.setPort(serverPort);
+            serverInfo.setHost(serverHost);
+            serverInfo.setPort(serverPort);
 
         }
         catch (Exception e) 
@@ -95,6 +97,7 @@ public class Satellite extends Thread {
            codeServerProperties = new PropertyHandler(classLoaderPropertiesFile);
            codeServerHost = codeServerProperties.getProperty("HOST");
            codeServerPort = Integer.parseInt(codeServerProperties.getProperty("PORT"));
+           
            try 
            {
                classLoader = new HTTPClassLoader(codeServerHost, codeServerPort);
@@ -121,8 +124,9 @@ public class Satellite extends Thread {
     @Override
     public void run() 
     {
+       ServerSocket server;
        Socket socket = null;
-       Socket clientSocket = null;
+       System.out.println(serverInfo.getPort());
 
         // register this satellite with the SatelliteManager on the server
         // ---------------------------------------------------------------
@@ -134,8 +138,7 @@ public class Satellite extends Thread {
         // ...
         try
         {
-           clientSocket = new Socket(serverInfo.getHost(),serverInfo.getPort());
-           ServerSocket server = new ServerSocket(serverInfo.getPort());
+           server = new ServerSocket(serverInfo.getPort());
            socket = server.accept();
         }
         catch(IOException ioe)
@@ -146,10 +149,9 @@ public class Satellite extends Thread {
         // start taking job requests in a server loop
         // ---------------------------------------------------------------
         // ...
-        Satellite satellite = new Satellite("../../config/Satellite.Earth.properties","../../config/WebServer.properties","../../config/Server.properties");
         while(true)
         {
-           SatelliteThread satThread = new SatelliteThread(clientSocket,satellite);
+           new SatelliteThread(socket,this).start();
         }
     }
 
