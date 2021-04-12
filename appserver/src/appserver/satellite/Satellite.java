@@ -10,6 +10,7 @@ import appserver.job.Tool;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -41,6 +42,10 @@ public class Satellite extends Thread {
        
        String serverHost;
        int serverPort;
+       
+       String codeServerHost;
+       int codeServerPort;
+       
         // read this satellite's properties and populate satelliteInfo object,
         // which later on will be sent to the server
         // ...
@@ -86,7 +91,18 @@ public class Satellite extends Thread {
         
         try
         {
-           classLoader.loadClass(classLoaderPropertiesFile);
+           Properties codeServerProperties;
+           codeServerProperties = new PropertyHandler(classLoaderPropertiesFile);
+           codeServerHost = codeServerProperties.getProperty("HOST");
+           codeServerPort = Integer.parseInt(codeServerProperties.getProperty("PORT"));
+           try 
+           {
+               classLoader = new HTTPClassLoader(codeServerHost, codeServerPort);
+           } 
+           catch (NumberFormatException nfe) 
+           {
+               System.err.println("Wrong Portnumber, using Defaults");
+           }
         }
         catch (Exception e) 
         {
@@ -95,14 +111,18 @@ public class Satellite extends Thread {
         }
 
         
-        // create tools cache
+        // create tools cache --> <String, tool Object>
         // -------------------
         // ...
+        toolsCache = new Hashtable<>();
         
     }
 
     @Override
-    public void run() {
+    public void run() 
+    {
+       Socket socket = null;
+       Socket clientSocket = null;
 
         // register this satellite with the SatelliteManager on the server
         // ---------------------------------------------------------------
@@ -112,15 +132,30 @@ public class Satellite extends Thread {
         // create server socket
         // ---------------------------------------------------------------
         // ...
-        
+        try
+        {
+           clientSocket = new Socket(serverInfo.getHost(),serverInfo.getPort());
+           ServerSocket server = new ServerSocket(serverInfo.getPort());
+           socket = server.accept();
+        }
+        catch(IOException ioe)
+        {
+           System.err.println("Could not create server socket");
+        }
         
         // start taking job requests in a server loop
         // ---------------------------------------------------------------
         // ...
+        Satellite satellite = new Satellite("../../config/Satellite.Earth.properties","../../config/WebServer.properties","../../config/Server.properties");
+        while(true)
+        {
+           SatelliteThread satThread = new SatelliteThread(clientSocket,satellite);
+        }
     }
 
     // inner helper class that is instanciated in above server loop and processes single job requests
-    private class SatelliteThread extends Thread {
+    private class SatelliteThread extends Thread 
+    {
 
         Satellite satellite = null;
         Socket jobRequest = null;
@@ -137,14 +172,47 @@ public class Satellite extends Thread {
         public void run() {
             // setting up object streams
             // ...
+            try
+            {
+               readFromNet = new ObjectInputStream(jobRequest.getInputStream());
+               writeToNet = new ObjectOutputStream(jobRequest.getOutputStream());
+            }
+            catch(IOException ioe)
+            {
+               System.err.println("Could not open streams");
+            }
             
             // reading message
             // ...
+            try
+            {
+               message = (Message) readFromNet.readObject();
+            }
+            catch(Exception err)
+            {
+               System.err.println("Could not read from ObjectInputStream");
+            }
             
             switch (message.getType()) {
                 case JOB_REQUEST:
                     // processing job request
                     // ...
+                   Job content = (Job) message.getContent();
+                   String toolName = content.getToolName();
+                   Object jobParam = content.getParameters();
+                   
+                   //call getToolObject
+                   try
+                   {
+                      Tool toolObject = getToolObject(toolName);
+                      Object result = toolObject.go(jobParam);
+                      writeToNet.writeObject(result);
+                   }
+                   catch(Exception err)
+                   {
+                      System.err.println("Error with creating toolObject");
+                   }
+                   
                     break;
 
                 default:
@@ -161,8 +229,34 @@ public class Satellite extends Thread {
     public Tool getToolObject(String toolClassString) throws UnknownToolException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         Tool toolObject = null;
-
-        // ...
+        
+        if((toolObject = (Tool)toolsCache.get(toolClassString)) == null)
+        {
+           System.out.println("\n Tool Object: "  + toolClassString);
+           
+           if(toolClassString == null)
+           {
+              System.out.println("toolClassString is null");
+              System.exit(-1);
+           }
+           
+           Class<?> toolClass = classLoader.loadClass(toolClassString);
+           try
+           {
+              toolObject = (Tool) toolClass.getDeclaredConstructor().newInstance();
+           }
+           catch (InvocationTargetException | NoSuchMethodException ex) 
+           {
+                Logger.getLogger(Satellite.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println("[DynCalculator] getToolObject() - InvocationTargetException");
+            }
+           toolsCache.put(toolClassString, toolObject);
+        }
+        
+        else
+        {
+           System.out.println("Tool: \"" + toolClassString + "\" already in Cache");
+        }
         
         return toolObject;
     }

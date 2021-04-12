@@ -8,20 +8,24 @@ import java.util.Hashtable;
  *
  * @author Dr.-Ing. Wolf-Dieter Otte
  */
-public class SatelliteManager {
+public class SatelliteManager 
+{
 
     // (the one) hash table that contains the connectivity information of all satellite servers
     static private Hashtable<String, ConnectivityInfo> satellites = null;
 
-    public SatelliteManager() {
+    public SatelliteManager() 
+    {
         // ..
     }
 
-    public void registerSatellite(ConnectivityInfo satelliteInfo) {
+    public void registerSatellite(ConnectivityInfo satelliteInfo) 
+    {
         // ...
     }
 
-    public ConnectivityInfo getSatelliteForName(String satelliteName) {
+    public ConnectivityInfo getSatelliteForName(String satelliteName) 
+    {
         // ..
     }
 }
